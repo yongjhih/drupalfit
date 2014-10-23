@@ -1,4 +1,4 @@
-package com.infstory.drupalfit;
+package drupalfit;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.squareup.okhttp.OkHttpClient;

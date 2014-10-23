@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.infstory.drupalfit.sample;
+package drupalfit.sample;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -31,9 +31,9 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.infstory.drupalfit.DrupalManager;
-import com.infstory.drupalfit.DrupalService;
-import com.infstory.drupalfit.DrupalService.User;
+import drupalfit.DrupalManager;
+import drupalfit.DrupalService;
+import drupalfit.DrupalService.User;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

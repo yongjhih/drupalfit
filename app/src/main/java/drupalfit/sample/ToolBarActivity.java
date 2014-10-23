@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.infstory.drupalfit.sample;
+package drupalfit.sample;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
