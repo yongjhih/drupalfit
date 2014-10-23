@@ -43,6 +43,24 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/endpoint"
+                android:textColor="#d111"
+                android:textColorHint="#d111"
+                android:background="#dfff"
+                android:hint="Endpoint"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/email"
                 android:textColor="#d111"
                 android:textColorHint="#d111"

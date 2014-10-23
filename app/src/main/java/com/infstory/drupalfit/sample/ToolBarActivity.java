@@ -20,6 +20,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.InjectViews;
+
 public abstract class ToolBarActivity extends ActionBarActivity {
 
     private Toolbar toolbar;
@@ -33,6 +37,7 @@ public abstract class ToolBarActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        ButterKnife.inject(this);
     }
 
     protected abstract int getContentView();

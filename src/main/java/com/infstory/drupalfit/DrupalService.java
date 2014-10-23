@@ -170,6 +170,16 @@ public interface DrupalService {
         Callback<User> callback
     );
 
+    /*
+    @FormUrlEncoded
+    @POST("/user/register")
+    void userRegister(
+        @Field("mail") String email,
+        @Field("pass") String password,
+        Callback<User> callback
+    );
+    */
+
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)

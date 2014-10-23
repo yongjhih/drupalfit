@@ -28,8 +28,48 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.infstory.drupalfit.DrupalManager;
+import com.infstory.drupalfit.DrupalService;
+import com.infstory.drupalfit.DrupalService.User;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedFile;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.InjectViews;
+import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnLongClick;
 
 public class HomeActivity extends ToolBarActivity {
+    @InjectView(R.id.email)
+    EditText email;
+    @InjectView(R.id.password)
+    EditText password;
+    @InjectView(R.id.endpoint)
+    EditText endpoint;
+
+    @OnClick(R.id.sign)
+    public void sign() {
+        DrupalManager.get().getService(endpoint.getText().toString()).userRegister(email.getText().toString(), email.getText().toString(), password.getText().toString(), new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                android.util.Log.d("drupalit", "" + user);
+                Toast.makeText(HomeActivity.this, "success", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                android.util.Log.d("drupalit", "" + error);
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private DrawerLayout drawer;
 
