@@ -1,6 +1,8 @@
 drupalfit
 =========
 
+![square drupal](drupal-webtreatsetc.png "Square drupal")
+
 A drupal services rest client with retrofit for android
 
 ![Screenshot](app/screenshot.png "Sign-up sample")
