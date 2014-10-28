@@ -2,12 +2,10 @@ language: android
 jdk: openjdk7
 android:
   components:
-    - build-tools-21.0.2
+    - android-20
     - build-tools-20.0.0
     - extra-android-support
     - extra-android-m2repository
-    - android-21
-    - android-20
   licenses:
     - '.+'
 
