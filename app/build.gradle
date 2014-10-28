@@ -38,5 +38,9 @@ android {
         exclude 'META-INF/ASL2.0'
         exclude 'META-INF/*'
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 

@@ -1,7 +1,5 @@
 buildscript {
     repositories {
-        maven { url 'http://repo1.maven.org/maven2' }
-        mavenLocal()
         mavenCentral()
     }
 
@@ -34,6 +32,10 @@ android {
         versionCode 1
         versionName '1.0.0'
     }
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 task wrapper(type: Wrapper) {
@@ -41,7 +43,11 @@ task wrapper(type: Wrapper) {
 }
 
 allprojects {
+    version = VERSION_NAME
+    group = GROUP
     repositories {
         mavenCentral()
     }
 }
+
+apply from: 'https://raw.github.com/chrisbanes/gradle-mvn-push/master/gradle-mvn-push.gradle'
