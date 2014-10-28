@@ -41,7 +41,7 @@ DrupalManager.get().getService("https://example.com/api").userLogin("foo", "pass
 Installation
 ============
 
-# build.gradle
+build.gradle:
 
 ```gradle
 dependencies {
