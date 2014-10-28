@@ -1,6 +1,8 @@
 drupalfit
 =========
 
+![travis of master](https://travis-ci.org/yongjhih/drupalfit.svg?branch=master "travis of master")
+
 ![square drupal](drupal-webtreatsetc.png "Square drupal")
 
 A drupal services rest client with retrofit for android
