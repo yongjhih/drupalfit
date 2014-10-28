@@ -8,5 +8,9 @@ android:
     - android-21
   licenses:
     - '.+'
+
+after_success:
+  - if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then gradle build uploadArchives -PnexusUsername="${nexusUsername}" -PnexusPassword="${nexusPassword}" ; fi
+
 script:
   - ./gradlew clean assemble check
