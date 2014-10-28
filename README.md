@@ -38,6 +38,24 @@ DrupalManager.get().getService("https://example.com/api").userLogin("foo", "pass
 });
 ```
 
+Installation
+============
+
+# build.gradle
+
+```gradle
+dependencies {
+    ...
+    compile "com.infstory:drupalfit:+"
+}
+
+repositories {
+    ...
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+}
+```
+
 [License] (LICENSE)
 ===================
 
