@@ -1,8 +1,6 @@
 drupalfit
 =========
 
-![travis of master](https://travis-ci.org/yongjhih/drupalfit.svg?branch=master "travis of master")
-
 [![Build Status](https://travis-ci.org/yongjhih/drupalfit.png?branch=master)](https://travis-ci.org/yongjhih/drupalfit) [![Stories in Ready](https://badge.waffle.io/yongjhih/drupalfit.png)](http://waffle.io/yongjhih/drupalfit) 
 
 ![square drupal](drupal-webtreatsetc.png "Square drupal")
