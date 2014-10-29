@@ -13,6 +13,19 @@ A drupal services rest client with retrofit for android
 Usage
 =====
 
+* userProfile with access token (POST https://example.com/api/user/profile)
+
+```java
+DrupalManager.setAccessToken("token").getService("https://example.com/api").userProfile(new Callback<User>() {
+    @Override
+    public void success(User user, Response response) {
+    }
+    @Override
+    public void failure(RetrofitError error) {
+    }
+});
+```
+
 * userRegister (https://example.com/api/user/register)
 
 Ref: [HomeActivity.java#L58](app/src/main/java/drupalfit/sample/HomeActivity.java#L58)

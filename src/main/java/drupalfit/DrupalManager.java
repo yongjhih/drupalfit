@@ -18,6 +18,7 @@ import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Streaming;
 import retrofit.mime.TypedFile;
+import retrofit.RequestInterceptor;
 
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMembers;
@@ -33,11 +34,17 @@ import java.security.GeneralSecurityException;
 import java.security.cert.X509Certificate;
 import java.io.IOException;
 import java.security.SecureRandom;
+import android.text.TextUtils;
 
 public class DrupalManager {
     private static DrupalManager sInstance = new DrupalManager();
     private DrupalService mService;
     private String mEndpoint;
+    private String accessToken;
+    private String cookie;
+    private String mXCsrfToken; //X-CSRF-Token
+
+    protected SimpleRequestInterceptor mRequestInterceptor;
 
     private DrupalManager() {
     }
@@ -50,16 +57,14 @@ public class DrupalManager {
         return get().getService(null);
     }
 
-    private String mToken;
-    private String mSession;
-    private String mXCsrfToken; //X-CSRF-Token
+    public DrupalManager setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
 
-    public void setSession(String session) {
-        mSession = session;
-    }
+        if (mRequestInterceptor != null) {
+            mRequestInterceptor.accessToken = accessToken;
+        }
 
-    public void setToken(String token) {
-        mToken = token;
+        return sInstance;
     }
 
     public DrupalService getService(String endpoint) {
@@ -72,6 +77,12 @@ public class DrupalManager {
             okHttpClient.setHostnameVerifier(getTrustedVerifier());
             Client client = new OkClient(okHttpClient);
 
+            if (mRequestInterceptor == null) {
+                mRequestInterceptor = new SimpleRequestInterceptor();
+            }
+            mRequestInterceptor.cookie = cookie;
+            mRequestInterceptor.accessToken = accessToken;
+
             RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(mEndpoint)
                 .setErrorHandler(new ErrorHandler())
@@ -83,6 +94,35 @@ public class DrupalManager {
         }
 
         return mService;
+    }
+
+    public String getCookie() {
+        return cookie;
+    }
+
+    public DrupalManager setCookie(String cookie) {
+        this.cookie = cookie;
+
+        if (mRequestInterceptor != null) {
+            mRequestInterceptor.cookie = cookie;
+        }
+
+        return sInstance;
+    }
+
+    public class SimpleRequestInterceptor implements RequestInterceptor {
+        public String cookie;
+        public String accessToken;
+
+        @Override
+        public void intercept(RequestFacade request) {
+            if (!TextUtils.isEmpty(cookie)) {
+                request.addHeader("Cookie", cookie);
+            }
+            if (!TextUtils.isEmpty(accessToken)) {
+                request.addQueryParam("access_token", accessToken);
+            }
+        }
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

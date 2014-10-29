@@ -249,6 +249,22 @@ public interface DrupalService {
         Callback<Login> callback
     );
 
+    /**
+     * userProfile.
+     *
+     * resource provided by oauth2_login_provider module.
+     *
+     * Args:
+     * HTTP Method: POST
+     * Example URL : http://drupal6-services/services/plist/user/login
+     * Example: &access_token or with cookie/session header
+     */
+    @FormUrlEncoded
+    @POST("/user/profile")
+    void userProfile(
+        Callback<User> callback
+    );
+
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)
