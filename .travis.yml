@@ -13,7 +13,7 @@ android:
     - '.+'
 
 after_success:
-  - if [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then ./gradlew build uploadArchives -PNEXUS_USERNAME="${nexusUsername}" -PNEXUS_PASSWORD="${nexusPassword}" -PnexusUsername="${nexusUsername}" -PnexusPassword="${nexusPassword}" ; fi
+  - if [[ $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_TAG ]]; then ./gradlew build uploadArchives -PNEXUS_USERNAME="${nexusUsername}" -PNEXUS_PASSWORD="${nexusPassword}" -PnexusUsername="${nexusUsername}" -PnexusPassword="${nexusPassword}" ; fi
 
 script:
   - ./gradlew clean assemble check
