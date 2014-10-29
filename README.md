@@ -50,11 +50,6 @@ dependencies {
     ...
     compile "com.infstory:drupalfit:+"
 }
-
-repositories {
-    ...
-    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-}
 ```
 
 [License] (LICENSE)
