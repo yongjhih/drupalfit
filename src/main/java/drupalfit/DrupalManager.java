@@ -49,6 +49,28 @@ public class DrupalManager {
     private DrupalManager() {
     }
 
+    /* TODO
+    DrupalManager drupalManager = new DrupalManager.Builder()
+        .setEndpoint("https://example.com/api")
+        .setAccessTokenByOAuth(
+            new DrupalOauth2Manager.Builder()
+                .setEndpoint("https://example.com/oauth2")
+                .setClientId("id")
+                .setClientSecret("secret")
+                .setProvider(context, DrupalOauth2Manager.FACEBOOK, "fb_access_token")
+                .build()
+        );
+
+    drupalManager.getService().userProfile(new Callback<User>() {
+        @Override
+        public void success(User user, Response response) {
+        }
+        @Override
+        public void failure(RetrofitError error) {
+        }
+    });
+    */
+
     public static DrupalManager get() {
         return sInstance;
     }
