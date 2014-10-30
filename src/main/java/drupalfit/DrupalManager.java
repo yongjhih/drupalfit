@@ -159,6 +159,13 @@ public class DrupalManager implements DrupalService {
         }
     }
 
+    @Override
+    public void userLogout(
+        Callback<Logout> callback
+    ) {
+        getService().userLogout(callback);
+    }
+
     public static DrupalManager get() {
         return sInstance;
     }

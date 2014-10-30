@@ -14,7 +14,7 @@ A drupal services rest client with retrofit for android
 Usage
 =====
 
-* userRegister (https://example.com/api/user/register)
+* userRegister
 
 ```java
 DrupalManager.get().getService("https://example.com/api").userRegister("foo", "foo@example.com", "password", new Callback<User>() {
@@ -27,7 +27,7 @@ DrupalManager.get().getService("https://example.com/api").userRegister("foo", "f
 });
 ```
 
-* userLogin (https://example.com/api/user/login)
+* userLogin
 
 ```java
 DrupalManager.get().getService("https://example.com/api").userLogin("foo", "password", new Callback<Login>() {
@@ -40,10 +40,23 @@ DrupalManager.get().getService("https://example.com/api").userLogin("foo", "pass
 });
 ```
 
+* userLogout (after userLogin)
+
+```java
+DrupalManager.get().userLogout(new Callback<Logout>() {
+    @Override
+    public void success(Logout logout, Response response) {
+    }
+    @Override
+    public void failure(RetrofitError error) {
+    }
+});
+```
+
 Bonus
 =====
 
-* userProfile with facebook access token (Depend on yongjhih/drupal-hybridauth + oauth2_server + oauth2_login_provider)
+* userProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth) + oauth2_server + oauth2_login_provider)
 
 ```java
 DrupalManager.get()
@@ -53,7 +66,7 @@ DrupalManager.get()
             .setEndpoint("https://example.com/oauth2")
             .setClientId("client_id")
             .setClientSecret("client_secret")
-            .setProvider(HomeActivity.this, DrupalOAuth2Manager.FACEBOOK, "facebook_token")
+            .setProvider(this, DrupalOAuth2Manager.FACEBOOK, "facebook_token")
             .build()
     ).build();
 

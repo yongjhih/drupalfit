@@ -285,6 +285,7 @@ public interface DrupalService {
 
     /**
      * userLogin.
+     *
      * Args:
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/user/login
@@ -333,4 +334,29 @@ public interface DrupalService {
         //"sessid": "853c6c7f6eaa051724080dff202eeec0"
         public String sessid;
     }
+
+    /**
+     * userLogout.
+     *
+     * Args:
+     * HTTP Method: POST
+     * Example URL : http://drupal6-services/services/plist/user/logout
+     * Example:
+     * Expected Response(in JSON): 1
+     */
+    @POST("/user/logout.json")
+    void userLogout(
+        Callback<Logout> callback
+    );
+
+    @Keep
+    @KeepClassMembers
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Logout {
+        public Logout() {
+        }
+
+        // [true]
+    }
+
 }
