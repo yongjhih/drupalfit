@@ -76,6 +76,11 @@ public class DrupalManager implements DrupalService {
         String email,
         String password,
         Callback<User> callback) {
+        /*
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        */
         getService().userRegister(username, email, password, callback);
     }
 
@@ -93,6 +98,10 @@ public class DrupalManager implements DrupalService {
         String password,
         Callback<Login> callback
     ) {
+        /*
+        this.username = username;
+        this.password = password;
+        */
         getService().userLogin(username, password, callback);
     }
 
@@ -101,6 +110,7 @@ public class DrupalManager implements DrupalService {
         String accessToken,
         final Callback<User> callback
     ) {
+        setAccessToken(accessToken);
         getService().userProfile(accessToken, callback);
     }
 
