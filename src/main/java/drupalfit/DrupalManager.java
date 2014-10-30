@@ -155,7 +155,7 @@ public class DrupalManager implements DrupalService {
             }
         } else {
             Log8.d();
-            getService().userProfile(accessToken, callback);
+            userProfile(accessToken, callback);
         }
     }
 

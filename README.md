@@ -14,22 +14,7 @@ A drupal services rest client with retrofit for android
 Usage
 =====
 
-* userProfile with access token (POST https://example.com/api/user/profile)
-
-```java
-DrupalManager.setAccessToken("token").getService("https://example.com/api").userProfile(new Callback<User>() {
-    @Override
-    public void success(User user, Response response) {
-    }
-    @Override
-    public void failure(RetrofitError error) {
-    }
-});
-```
-
 * userRegister (https://example.com/api/user/register)
-
-Ref: [HomeActivity.java#L58](app/src/main/java/drupalfit/sample/HomeActivity.java#L58)
 
 ```java
 DrupalManager.get().getService("https://example.com/api").userRegister("foo", "foo@example.com", "password", new Callback<User>() {
@@ -55,6 +40,33 @@ DrupalManager.get().getService("https://example.com/api").userLogin("foo", "pass
 });
 ```
 
+Bonus
+=====
+
+* userProfile with facebook access token (Depend on yongjhih/drupal-hybridauth + oauth2_server + oauth2_login_provider)
+
+```java
+DrupalManager.get()
+    .setEndpoint("https://example.com/api")
+    .setOAuth(
+        new DrupalOAuth2Manager.Builder()
+            .setEndpoint("https://example.com/oauth2")
+            .setClientId("client_id")
+            .setClientSecret("client_secret")
+            .setProvider(HomeActivity.this, DrupalOAuth2Manager.FACEBOOK, "facebook_token")
+            .build()
+    ).build();
+
+DrupalManager.get().userProfile(new Callback<User>() {
+    @Override
+    public void success(User user, Response response) {
+    }
+    @Override
+    public void failure(RetrofitError error) {
+    }
+});
+```
+
 Installation
 ============
 
@@ -62,7 +74,6 @@ build.gradle:
 
 ```gradle
 dependencies {
-    ...
     compile "com.infstory:drupalfit:+"
 }
 ```
