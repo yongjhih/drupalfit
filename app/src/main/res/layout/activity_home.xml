@@ -121,7 +121,7 @@
                 android:textColor="#d111"
                 android:textColorHint="#d111"
                 android:background="#dfff"
-                android:hint="client_id"
+                android:hint="client_secret"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
