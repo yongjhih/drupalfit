@@ -269,7 +269,7 @@ public class DrupalOAuth2Manager {
     }
 
     public void getAccessToken(String cookie, final Callback<Credential> callback) {
-        mRequestInterceptor.setCookie(cookie);
+        setCookie(cookie);
 
         final Callback authorizeCallback = new Callback<Response>() {
             @Override
@@ -404,7 +404,7 @@ public class DrupalOAuth2Manager {
         if (mRequestInterceptor == null) {
             mRequestInterceptor = new SimpleRequestInterceptor();
         }
-        mRequestInterceptor.setCookie(cookie);
+        mRequestInterceptor.cookie = cookie;
 
         RestAdapter restAdapter = new RestAdapter.Builder()
             .setEndpoint(endpoint)
@@ -423,19 +423,14 @@ public class DrupalOAuth2Manager {
 
     public void setCookie(String cookie) {
         this.cookie = cookie;
-        if (mRequestInterceptor == null) {
-            mRequestInterceptor = new SimpleRequestInterceptor();
-        }
 
-        mRequestInterceptor.setCookie(cookie);
+        if (mRequestInterceptor != null) {
+            mRequestInterceptor.cookie = cookie;
+        }
     }
 
     class SimpleRequestInterceptor implements RequestInterceptor {
-        private String cookie;
-
-        public void setCookie(String cookie) {
-            this.cookie = cookie;
-        }
+        public String cookie;
 
         @Override
         public void intercept(RequestFacade request) {

@@ -52,34 +52,6 @@ public class DrupalManager implements DrupalService {
 
     private DrupalOAuth2Manager oauth;
 
-    /* TODO
-    DrupalManager.Builder()
-        .setEndpoint("https://example.com/api")
-        .setOAuth(
-            new DrupalOAuth2Manager.Builder()
-                .setEndpoint("https://example.com/oauth2")
-                .setClientId("id")
-                .setClientSecret("secret")
-                .setProvider(context, DrupalOAuth2Manager.FACEBOOK, "fb_access_token")
-                .build()
-        ).build();
-
-    DrupalManager.get().userProfile(new Callback<User>() {
-        @Override
-        public void success(User user, Response response) {
-        }
-        @Override
-        public void failure(RetrofitError error) {
-        }
-    });
-
-    public static class Builder() {
-        DrupalManager build() {
-            return
-        }
-    }
-    */
-
     public DrupalManager setOAuth(DrupalOAuth2Manager oauth) {
         this.oauth = oauth;
         return sInstance;
@@ -144,7 +116,7 @@ public class DrupalManager implements DrupalService {
                     public void success(Credential credential, Response response) {
                         setAccessToken(credential.access_token);
                         Log8.d(accessToken);
-                        userProfile(accessToken, callback);
+                        getService().userProfile(callback);
                     }
                     @Override
                     public void failure(RetrofitError error) {
@@ -155,7 +127,7 @@ public class DrupalManager implements DrupalService {
             }
         } else {
             Log8.d();
-            userProfile(accessToken, callback);
+            getService().userProfile(callback);
         }
     }
 
@@ -206,6 +178,7 @@ public class DrupalManager implements DrupalService {
 
             RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
+                .setRequestInterceptor(mRequestInterceptor)
                 .setErrorHandler(new ErrorHandler())
                 .setClient(client)
                 .setConverter(new retrofit.converter.JacksonConverter())
@@ -240,12 +213,11 @@ public class DrupalManager implements DrupalService {
             if (!TextUtils.isEmpty(cookie)) {
                 request.addHeader("Cookie", cookie);
             }
-            /*
             if (!TextUtils.isEmpty(accessToken)) {
+                Log8.d();
                 //request.addQueryParam("access_token", accessToken);
                 request.addEncodedQueryParam("access_token", accessToken);
             }
-            */
         }
     }
 
