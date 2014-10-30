@@ -96,6 +96,60 @@
                 android:layout_height="1dp"
                 android:background="#8fff"
                 />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/client_id"
+                android:textColor="#d111"
+                android:textColorHint="#d111"
+                android:background="#dfff"
+                android:hint="client_id"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/client_secret"
+                android:textColor="#d111"
+                android:textColorHint="#d111"
+                android:background="#dfff"
+                android:hint="client_id"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/token"
+                android:textColor="#d111"
+                android:textColorHint="#d111"
+                android:background="#dfff"
+                android:hint="token"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -47,6 +47,11 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnLongClick;
 
+import drupalfit.DrupalOAuth2Manager;
+import drupalfit.Log8;
+
+import android.net.Uri;
+
 public class HomeActivity extends ToolBarActivity {
     @InjectView(R.id.email)
     EditText email;
@@ -54,19 +59,44 @@ public class HomeActivity extends ToolBarActivity {
     EditText password;
     @InjectView(R.id.endpoint)
     EditText endpoint;
+    @InjectView(R.id.client_id)
+    EditText clientId;
+    @InjectView(R.id.client_secret)
+    EditText clientSecret;
+    @InjectView(R.id.token)
+    EditText token;
 
     @OnClick(R.id.sign)
     public void sign() {
-        DrupalManager.get().getService(endpoint.getText().toString()).userRegister(email.getText().toString(), email.getText().toString(), password.getText().toString(), new Callback<User>() {
+        //DrupalManager.get().getService(endpoint.getText().toString()).userRegister(email.getText().toString(), email.getText().toString(), password.getText().toString(), new Callback<User>() {
+        String restEndpoint = endpoint.getText().toString();
+        Uri uri = Uri.parse(restEndpoint);
+        String oauthEndpoint = uri.getScheme() + "://" + uri.getAuthority() + "/oauth2";
+
+        DrupalManager.get()
+            .setEndpoint(restEndpoint)
+            .setOAuth(
+                new DrupalOAuth2Manager.Builder()
+                    .setEndpoint(oauthEndpoint)
+                    .setClientId(clientId.getText().toString())
+                    .setClientSecret(clientSecret.getText().toString())
+                    .setProvider(HomeActivity.this, DrupalOAuth2Manager.FACEBOOK, token.getText().toString())
+                    .build()
+            ).build();
+
+        DrupalManager.get().userProfile(new Callback<User>() {
             @Override
             public void success(User user, Response response) {
-                android.util.Log.d("drupalit", "" + user);
-                Toast.makeText(HomeActivity.this, "success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "success: " + "uid:" + user.uid + ", name: " + user.name + ", accessToken: " + DrupalManager.get().getAccessToken(), Toast.LENGTH_SHORT).show();
+                Log8.d(user.name);
+                Log8.d(user.mail);
+                Log8.d(user.uid);
+                Log8.d(DrupalManager.get().getAccessToken());
             }
             @Override
             public void failure(RetrofitError error) {
-                android.util.Log.d("drupalit", "" + error);
-                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                Log8.d(error);
             }
         });
     }

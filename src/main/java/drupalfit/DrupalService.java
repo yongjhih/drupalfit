@@ -162,7 +162,7 @@ public interface DrupalService {
      * }
      */
     @FormUrlEncoded
-    @POST("/user/register")
+    @POST("/user/register.json")
     void userRegister(
         @Field("name") String username,
         @Field("mail") String email,
@@ -180,6 +180,60 @@ public interface DrupalService {
     );
     */
 
+/*
+{
+  "rdf_mapping": {
+    "homepage": {
+      "type": "rel",
+      "predicates": [
+        "foaf:page"
+      ]
+    },
+    "name": {
+      "predicates": [
+        "foaf:name"
+      ]
+    },
+    "rdftype": [
+      "sioc:UserAccount"
+    ]
+  },
+  "access": "1414653769",
+  "created": "1414155320",
+  "signature_format": null,
+  "signature": "",
+  "theme": "",
+  "mail": "saad.thahim@yahoo.com",
+  "name": "saad.thahim",
+  "uid": "24824",
+  "login": "1414652619",
+  "status": "1",
+  "timezone": "Asia/Taipei",
+  "language": "en_GB",
+  "picture": {
+    "url": "https://login.8tory.com/sites/default/files/pictures/picture-24824-1414155320.jpg",
+    "rdf_mapping": [],
+    "fid": "24340",
+    "uid": "24824",
+    "filename": "picture-24824-1414155320.jpg",
+    "uri": "public://pictures/picture-24824-1414155320.jpg",
+    "filemime": "image/jpeg",
+    "filesize": "9422",
+    "status": "1",
+    "timestamp": "1414155320"
+  },
+  "init": "saad.thahim@yahoo.com",
+  "data": {
+    "mimemail_textonly": 0,
+    "l10n_client_disabled": false,
+    "contact": 1
+  },
+  "roles": {
+    "2": "authenticated user"
+  }
+}
+*/
+
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -187,51 +241,46 @@ public interface DrupalService {
         public User() {
         }
 
-        // "password": "pass",
-        public String password;
-        /*
-        "roles": {
-          "2": "authenticated user"
-        },
-        */
-        //"data": "a:0:{}",
-        public String data;
-        //"init": "test@test.com",
-        public String init;
-        //"picture": "",
-        public String picture;
-        //"theme": "",
-        public String theme;
-        //"threshold": "0",
-        public String threshold;
-        /*
-        "sort": "0",
-        "mode": "0",
-        */
-        //"mail": "test@test.com",
-        public String mail;
-        //"pass": "1a1dc91c907325c69271ddf0c944bc72",
-        public String pass;
-        //"name": "test",
-        public String name;
-        //"uid": "15",
-        public String uid;
-        /*
-        "signature": "",
-        "signature_format": "0",
-        */
-        //"created": "1294793391",
-        public String created;
-        //"access": "1294793391",
+      //"access": "1414653769",
         public String access;
-        //"login": "0",
+      //"created": "1414155320",
+        public String created;
+      //"signature_format": null,
+      //"signature": "",
+      //"theme": "",
+      //"mail": "foo@bar.com",
+        public String mail;
+      //"name": "foo",
+        public String name;
+      //"uid": "1234",
+        public String uid;
+      //"login": "1414652619",
         public String login;
+      //"status": "1",
+      //"timezone": "Asia/Taipei",
+      //"language": "en_GB",
+      //"picture": {
+        //"url": "https://bar.com/sites/default/files/pictures/picture-24824-1414155320.jpg",
+        //"rdf_mapping": [],
+        //"fid": "24340",
+        //"uid": "1234",
+        //"filename": "picture-24824-1414155320.jpg",
+        //"uri": "public://pictures/picture-24824-1414155320.jpg",
+        //"filemime": "image/jpeg",
+        //"filesize": "9422",
         //"status": "1",
-        public String status;
-        /*
-        "timezone": "-25200",
-        "language": ""
-        */
+        //"timestamp": "1414155320"
+      //},
+      //"init": "saad.thahim@yahoo.com",
+        public String init;
+      //"data": {
+        //"mimemail_textonly": 0,
+        //"l10n_client_disabled": false,
+        //"contact": 1
+      //},
+      //"roles": {
+        //"2": "authenticated user"
+      //}
     }
 
     /**
@@ -242,7 +291,7 @@ public interface DrupalService {
      * Example: &name=admin&pass=pass
      */
     @FormUrlEncoded
-    @POST("/user/login")
+    @POST("/user/login.json")
     void userLogin(
         @Field("name") String username,
         @Field("pass") String password,
@@ -259,9 +308,15 @@ public interface DrupalService {
      * Example URL : http://drupal6-services/services/plist/user/login
      * Example: &access_token or with cookie/session header
      */
-    @FormUrlEncoded
-    @POST("/user/profile")
+    @POST("/user/profile.json")
     void userProfile(
+        Callback<User> callback
+    );
+
+    @FormUrlEncoded
+    @POST("/user/profile.json")
+    void userProfile(
+        @Field("access_token") String accessToken,
         Callback<User> callback
     );
 

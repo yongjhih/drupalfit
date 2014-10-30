@@ -35,33 +35,36 @@ import java.security.cert.X509Certificate;
 import java.io.IOException;
 import java.security.SecureRandom;
 import android.text.TextUtils;
+import drupalfit.DrupalOAuth2.Credential;
 
-public class DrupalManager {
+public class DrupalManager implements DrupalService {
     private static DrupalManager sInstance = new DrupalManager();
     private DrupalService mService;
-    private String mEndpoint;
+    private String endpoint;
     private String accessToken;
     private String cookie;
     private String mXCsrfToken; //X-CSRF-Token
+    private String username; // TODO
+    private String email; // TODO
+    private String password; // TODO
 
     protected SimpleRequestInterceptor mRequestInterceptor;
 
-    private DrupalManager() {
-    }
+    private DrupalOAuth2Manager oauth;
 
     /* TODO
-    DrupalManager drupalManager = new DrupalManager.Builder()
+    DrupalManager.Builder()
         .setEndpoint("https://example.com/api")
-        .setAccessTokenByOAuth(
-            new DrupalOauth2Manager.Builder()
+        .setOAuth(
+            new DrupalOAuth2Manager.Builder()
                 .setEndpoint("https://example.com/oauth2")
                 .setClientId("id")
                 .setClientSecret("secret")
-                .setProvider(context, DrupalOauth2Manager.FACEBOOK, "fb_access_token")
+                .setProvider(context, DrupalOAuth2Manager.FACEBOOK, "fb_access_token")
                 .build()
-        );
+        ).build();
 
-    drupalManager.getService().userProfile(new Callback<User>() {
+    DrupalManager.get().userProfile(new Callback<User>() {
         @Override
         public void success(User user, Response response) {
         }
@@ -69,7 +72,92 @@ public class DrupalManager {
         public void failure(RetrofitError error) {
         }
     });
+
+    public static class Builder() {
+        DrupalManager build() {
+            return
+        }
+    }
     */
+
+    public DrupalManager setOAuth(DrupalOAuth2Manager oauth) {
+        this.oauth = oauth;
+        return sInstance;
+    }
+
+    public DrupalManager setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
+        return sInstance;
+    }
+
+    public DrupalManager build() {
+        getService(endpoint);
+        return sInstance;
+    }
+
+    private DrupalManager() {
+    }
+
+    @Override
+    public void userRegister(
+        String username,
+        String email,
+        String password,
+        Callback<User> callback) {
+        getService().userRegister(username, email, password, callback);
+    }
+
+    public void userRegister(
+        String email,
+        String password,
+        Callback<User> callback
+    ) {
+        userRegister(email, email, password, callback);
+    }
+
+    @Override
+    public void userLogin(
+        String username,
+        String password,
+        Callback<Login> callback
+    ) {
+        getService().userLogin(username, password, callback);
+    }
+
+    @Override
+    public void userProfile(
+        String accessToken,
+        final Callback<User> callback
+    ) {
+        getService().userProfile(accessToken, callback);
+    }
+
+    @Override
+    public void userProfile(
+        final Callback<User> callback
+    ) {
+        if (cookie == null && accessToken == null) {
+            if (oauth != null) {
+                Log8.d();
+                oauth.getAccessToken(new Callback<Credential>() {
+                    @Override
+                    public void success(Credential credential, Response response) {
+                        setAccessToken(credential.access_token);
+                        Log8.d(accessToken);
+                        userProfile(accessToken, callback);
+                    }
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log8.d();
+                        callback.failure(error);
+                    }
+                });
+            }
+        } else {
+            Log8.d();
+            getService().userProfile(accessToken, callback);
+        }
+    }
 
     public static DrupalManager get() {
         return sInstance;
@@ -77,6 +165,10 @@ public class DrupalManager {
 
     public static DrupalService getService() {
         return get().getService(null);
+    }
+
+    public String getAccessToken() {
+        return accessToken;
     }
 
     public DrupalManager setAccessToken(String accessToken) {
@@ -93,7 +185,7 @@ public class DrupalManager {
         if (endpoint == null) return mService;
 
         if (mService == null) {
-            mEndpoint = endpoint;
+            this.endpoint = endpoint;
             OkHttpClient okHttpClient = new OkHttpClient();
             okHttpClient.setSslSocketFactory(getTrustedFactory());
             okHttpClient.setHostnameVerifier(getTrustedVerifier());
@@ -106,7 +198,7 @@ public class DrupalManager {
             mRequestInterceptor.accessToken = accessToken;
 
             RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(mEndpoint)
+                .setEndpoint(endpoint)
                 .setErrorHandler(new ErrorHandler())
                 .setClient(client)
                 .setConverter(new retrofit.converter.JacksonConverter())
@@ -141,9 +233,12 @@ public class DrupalManager {
             if (!TextUtils.isEmpty(cookie)) {
                 request.addHeader("Cookie", cookie);
             }
+            /*
             if (!TextUtils.isEmpty(accessToken)) {
-                request.addQueryParam("access_token", accessToken);
+                //request.addQueryParam("access_token", accessToken);
+                request.addEncodedQueryParam("access_token", accessToken);
             }
+            */
         }
     }
 
