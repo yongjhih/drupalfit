@@ -254,7 +254,7 @@ public class DrupalOAuth2Manager {
     }
 
     /**
-     * getAccessTokenByPassword
+     * getAccessToken
      */
     public void getAccessToken(String username, String password, Callback<Credential> callback) {
         mService.token(
@@ -266,6 +266,37 @@ public class DrupalOAuth2Manager {
             password,
             callback
         );
+    }
+
+    public Credential getAccessToken(String username, String password) {
+        return mService.token(
+            clientId,
+            clientSecret,
+            "password",
+            state,
+            username,
+            password
+        );
+    }
+
+    public Credential getAccessToken(String cookie) {
+        setCookie(cookie);
+
+        Response response = mService.authorize(
+            clientId,
+            clientSecret,
+            "code",
+            state
+        );
+
+        Uri uri = Uri.parse(response.getUrl());
+        String code = uri.getQueryParameter("code");
+
+        if (!TextUtils.isEmpty(code)) {
+            return mService.token(code, clientId, clientSecret, "authorization_code", state);
+        }
+
+        return null;
     }
 
     public void getAccessToken(String cookie, final Callback<Credential> callback) {
@@ -299,15 +330,25 @@ public class DrupalOAuth2Manager {
         );
     }
 
+    public Credential getAccessToken() {
+        if (!TextUtils.isEmpty(cookie)) {
+            return getAccessToken(cookie);
+        } else if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
+            return getAccessToken(username, password);
+        } else {
+            return getAccessToken(context, provider, token);
+        }
+    }
+
     public void getAccessToken(final Callback<Credential> callback) {
         if (!TextUtils.isEmpty(cookie)) {
-                        Log8.d();
+            Log8.d();
             getAccessToken(cookie, callback);
         } else if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-                        Log8.d();
+            Log8.d();
             getAccessToken(username, password, callback);
         } else {
-                        Log8.d();
+            Log8.d();
             getAccessToken(context, provider, token, callback);
         }
     }
@@ -316,19 +357,35 @@ public class DrupalOAuth2Manager {
         getAccessToken(context, provider, token, callback);
     }
 
+    public Credential getAccessToken(Context context, String provider, String token) {
+        if (TextUtils.isEmpty(token)) {
+            return null;
+        }
+        if (TextUtils.isEmpty(provider)) {
+            return null;
+        }
+        if (context == null) {
+            return null;
+        }
+
+        // TODO String cookie = getHybridauthCookie(context, provider, token)
+        // return getAccessToken(cookie);
+        return null;
+    }
+
     public void getAccessToken(Context context, String provider, String token, final Callback<Credential> callback) {
         if (TextUtils.isEmpty(token)) {
-                        Log8.d();
+            Log8.d();
             callback.failure(RetrofitError.unexpectedError("oauth://failure", new RuntimeException()));
             return;
         }
         if (TextUtils.isEmpty(provider)) {
-                        Log8.d();
+            Log8.d();
             callback.failure(RetrofitError.unexpectedError("oauth://failure", new RuntimeException()));
             return;
         }
         if (context == null) {
-                        Log8.d();
+            Log8.d();
             callback.failure(RetrofitError.unexpectedError("oauth://failure", new RuntimeException()));
             return;
         }

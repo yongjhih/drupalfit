@@ -23,6 +23,9 @@ import retrofit.mime.TypedFile;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMembers;
 
+import rx.Observable;
+import rx.functions.Func1;
+
 /**
  * DrupalOAuth2.
  */
@@ -39,6 +42,14 @@ public interface DrupalOAuth2 {
         Callback<Response> callback
     );
 
+    @GET("/authorize")
+    Response authorize(
+        @Query("client_id") String clientId,
+        @Query("client_secret") String clientSecret,
+        @Query("response_type") String responseType,
+        @Query("state") String state
+    );
+
     /**
      * curl -k -X POST 'https://example.com/oauth2/token' -d 'code=aa5b25e58cb0ecbb1ddf5d671e769b04cabcdefg&state=8tory&grant_type=authorization_code&client_id=id&client_secret=secret'
      */
@@ -53,6 +64,27 @@ public interface DrupalOAuth2 {
         Callback<Credential> callback
     );
 
+    @Multipart
+    @POST("/token")
+    Credential token(
+        @Part("code") String code,
+        @Part("client_id") String clientId,
+        @Part("client_secret") String clientSecret,
+        @Part("grant_type") String grantType,
+        @Part("state") String state
+    );
+
+    @Multipart
+    @POST("/token")
+    Observable<Credential> observeToken(
+        @Part("code") String code,
+        @Part("client_id") String clientId,
+        @Part("client_secret") String clientSecret,
+        @Part("grant_type") String grantType,
+        @Part("state") String state
+    );
+
+
     /**
      * curl -k -X POST 'https://example.com/oauth2/token' -d 'grant_type=password&client_id=id&client_secret=secret&state=state&username=foo&password=bar'
      */
@@ -66,6 +98,28 @@ public interface DrupalOAuth2 {
         @Part("username") String username,
         @Part("password") String password,
         Callback<Credential> callback
+    );
+
+    @Multipart
+    @POST("/token")
+    Credential token(
+        @Part("client_id") String clientId,
+        @Part("client_secret") String clientSecret,
+        @Part("grant_type") String grantType,
+        @Part("state") String state,
+        @Part("username") String username,
+        @Part("password") String password
+    );
+
+    @Multipart
+    @POST("/token")
+    Observable<Credential> observeToken(
+        @Part("client_id") String clientId,
+        @Part("client_secret") String clientSecret,
+        @Part("grant_type") String grantType,
+        @Part("state") String state,
+        @Part("username") String username,
+        @Part("password") String password
     );
 
     @Keep

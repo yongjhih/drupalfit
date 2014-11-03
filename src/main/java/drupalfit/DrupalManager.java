@@ -57,6 +57,10 @@ public class DrupalManager implements DrupalService {
         return sInstance;
     }
 
+    public DrupalOAuth2Manager getOAuth() {
+        return oauth;
+    }
+
     public DrupalManager setEndpoint(String endpoint) {
         this.endpoint = endpoint;
         return sInstance;
@@ -157,6 +161,29 @@ public class DrupalManager implements DrupalService {
     }
 
     public String getAccessToken() {
+        if (!TextUtils.isEmpty(accessToken)) {
+            return accessToken;
+        }
+
+        if (oauth != null) {
+            Credential c = oauth.getAccessToken();
+            if (c != null) {
+                setAccessToken(c.access_token);
+            }
+        }
+
+        return accessToken;
+    }
+
+    public String getAccessToken(String username, String password) {
+        return getAccessToken(username, password, null);
+    }
+
+    public String getAccessToken(String username, String password, String authTokenType) {
+        Credential c = oauth.getAccessToken(username, password);
+        if (c != null) {
+            setAccessToken(c.access_token);
+        }
         return accessToken;
     }
 
@@ -186,15 +213,13 @@ public class DrupalManager implements DrupalService {
             mRequestInterceptor.cookie = cookie;
             mRequestInterceptor.accessToken = accessToken;
 
-            RestAdapter restAdapter = new RestAdapter.Builder()
+            mService = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
                 .setRequestInterceptor(mRequestInterceptor)
                 .setErrorHandler(new ErrorHandler())
                 .setClient(client)
                 .setConverter(new retrofit.converter.JacksonConverter())
-                .build();
-
-            mService = restAdapter.create(DrupalService.class);
+                .build().create(DrupalService.class);
         }
 
         return mService;
