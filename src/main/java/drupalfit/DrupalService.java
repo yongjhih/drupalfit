@@ -180,60 +180,6 @@ public interface DrupalService {
     );
     */
 
-/*
-{
-  "rdf_mapping": {
-    "homepage": {
-      "type": "rel",
-      "predicates": [
-        "foaf:page"
-      ]
-    },
-    "name": {
-      "predicates": [
-        "foaf:name"
-      ]
-    },
-    "rdftype": [
-      "sioc:UserAccount"
-    ]
-  },
-  "access": "1414653769",
-  "created": "1414155320",
-  "signature_format": null,
-  "signature": "",
-  "theme": "",
-  "mail": "saad.thahim@yahoo.com",
-  "name": "saad.thahim",
-  "uid": "24824",
-  "login": "1414652619",
-  "status": "1",
-  "timezone": "Asia/Taipei",
-  "language": "en_GB",
-  "picture": {
-    "url": "https://login.8tory.com/sites/default/files/pictures/picture-24824-1414155320.jpg",
-    "rdf_mapping": [],
-    "fid": "24340",
-    "uid": "24824",
-    "filename": "picture-24824-1414155320.jpg",
-    "uri": "public://pictures/picture-24824-1414155320.jpg",
-    "filemime": "image/jpeg",
-    "filesize": "9422",
-    "status": "1",
-    "timestamp": "1414155320"
-  },
-  "init": "saad.thahim@yahoo.com",
-  "data": {
-    "mimemail_textonly": 0,
-    "l10n_client_disabled": false,
-    "contact": 1
-  },
-  "roles": {
-    "2": "authenticated user"
-  }
-}
-*/
-
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -271,7 +217,7 @@ public interface DrupalService {
         //"status": "1",
         //"timestamp": "1414155320"
       //},
-      //"init": "saad.thahim@yahoo.com",
+      //"init": "foo@bar.com",
         public String init;
       //"data": {
         //"mimemail_textonly": 0,
@@ -329,9 +275,9 @@ public interface DrupalService {
         }
 
         public User user;
-        //"session_name": "SESS8b1f176c338bbcc3922a56004cec3c41",
+        //"session_name": "SESS8b1f176c338bbcc3922a56004cec1234",
         public String session_name;
-        //"sessid": "853c6c7f6eaa051724080dff202eeec0"
+        //"sessid": "853c6c7f6eaa051724080dff202e1234"
         public String sessid;
     }
 
