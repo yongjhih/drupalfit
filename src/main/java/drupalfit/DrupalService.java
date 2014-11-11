@@ -279,6 +279,7 @@ public interface DrupalService {
         public String session_name;
         //"sessid": "853c6c7f6eaa051724080dff202e1234"
         public String sessid;
+        public String token; // X-CSRF-Token ?
     }
 
     /**
@@ -316,6 +317,101 @@ public interface DrupalService {
         Callback<Node> callback
     );
 
+/*
+{
+  "path": "https://example.com/content/test",
+  "data": "a:2:{s:20:\"l10n_client_disabled\";b:0;s:7:\"overlay\";i:1;}",
+  "picture": "0",
+  "name": "foo",
+  "comment_count": "0",
+  "last_comment_uid": "1",
+  "last_comment_name": null,
+  "last_comment_timestamp": "1389341070",
+  "cid": "0",
+  "rdf_mapping": {
+    "last_activity": {
+      "callback": "date_iso8601",
+      "datatype": "xsd:dateTime",
+      "predicates": [
+        "sioc:last_activity_date"
+      ]
+    },
+    "rdftype": [
+      "foaf:Document"
+    ],
+    "title": {
+      "predicates": [
+        "dc:title"
+      ]
+    },
+    "created": {
+      "callback": "date_iso8601",
+      "datatype": "xsd:dateTime",
+      "predicates": [
+        "dc:date",
+        "dc:created"
+      ]
+    },
+    "changed": {
+      "callback": "date_iso8601",
+      "datatype": "xsd:dateTime",
+      "predicates": [
+        "dc:modified"
+      ]
+    },
+    "body": {
+      "predicates": [
+        "content:encoded"
+      ]
+    },
+    "uid": {
+      "type": "rel",
+      "predicates": [
+        "sioc:has_creator"
+      ]
+    },
+    "name": {
+      "predicates": [
+        "foaf:name"
+      ]
+    },
+    "comment_count": {
+      "datatype": "xsd:integer",
+      "predicates": [
+        "sioc:num_replies"
+      ]
+    }
+  },
+  "body": {
+    "und": [
+      {
+        "safe_summary": "",
+        "safe_value": "<p>test</p>\n",
+        "format": "filtered_html",
+        "summary": "",
+        "value": "test"
+      }
+    ]
+  },
+  "revision_uid": "1",
+  "sticky": "0",
+  "promote": "0",
+  "comment": "1",
+  "status": "1",
+  "log": "",
+  "title": "test",
+  "uid": "1",
+  "vid": "1",
+  "nid": "1",
+  "type": "page",
+  "language": "und",
+  "created": "1389341070",
+  "changed": "1389341070",
+  "tnid": "0",
+  "translate": "0",
+  "revision_timestamp": "1389341070"
+}
+*/
     /**
      * Args:
      * HTTP Method : GET
@@ -332,10 +428,19 @@ public interface DrupalService {
         public int nid;
         public int uid;
         public String title;
-        public String body;
         public String type;
         public long created; // TODO Date
         public long changed; // TODO Date
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("nid: " + nid + ", ");
+            sb.append("uid: " + uid + ", ");
+            sb.append("title: " + title + ", ");
+            sb.append("type: " + type + ", ");
+            return sb.toString();
+        }
     }
 
     @Keep
@@ -378,5 +483,13 @@ public interface DrupalService {
         @Path("args") String args,
         @Path("display_id") int displayId,
         Callback<Views> callback
+    );
+
+    @FormUrlEncoded
+    @POST("/token.json")
+    void token(
+        @Field("username") String username,
+        @Field("password") String password,
+        Callback<Login> callback
     );
 }

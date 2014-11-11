@@ -331,6 +331,20 @@ public class DrupalManager implements DrupalService {
         getService().getNode(nid, callback);
     }
 
+    public void getNode(
+        String nid,
+        Callback<Node> callback
+    ) {
+        int i;
+        try {
+            i = Integer.valueOf(nid);
+        } catch (Exception e) {
+            callback.failure(RetrofitError.unexpectedError("failure", e));
+            return;
+        }
+        getNode(i, callback);
+    }
+
     /** {@inheritDoc} */
     @Override
     public void getTaxonomyVocabulary(
@@ -362,5 +376,21 @@ public class DrupalManager implements DrupalService {
         Callback<Views> callback
     ) {
         getService().getViews(name, limit, args, displayId, callback);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void token(
+        String username,
+        String password,
+        Callback<Login> callback
+    ) {
+        getService().token(username, password, callback);
+    }
+
+    public void token(
+        Callback<Login> callback
+    ) {
+        token(username, password, callback);
     }
 }
