@@ -240,8 +240,8 @@ public interface DrupalService {
     @FormUrlEncoded
     @POST("/user/login.json")
     void userLogin(
-        @Field("name") String username,
-        @Field("pass") String password,
+        @Field("username") String username,
+        @Field("password") String password,
         Callback<Login> callback
     );
 
