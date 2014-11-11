@@ -39,7 +39,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
             android:padding="4dp"
             android:id="@+id/content"
             android:orientation="vertical"
@@ -59,7 +58,7 @@
                 />
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="10dp"
                 android:background="#8fff"
                 />
             <EditText
@@ -69,7 +68,7 @@
                 android:textColor="#d111"
                 android:textColorHint="#d111"
                 android:background="#dfff"
-                android:hint="Email: abc@example.com"
+                android:hint="Username/Email"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
@@ -95,47 +94,60 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#8fff"
                 />
-            <EditText
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/client_id"
-                android:textColor="#d111"
-                android:textColorHint="#d111"
-                android:background="#dfff"
-                android:hint="client_id"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                />
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/signin"
+                    android:textColor="#d111"
+                    android:textColorHint="#d111"
+                    android:background="#dfff"
+                    android:text="Sign-in with username"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:gravity="center"
+                    />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#8fff"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/signup"
+                    android:textColor="#d111"
+                    android:textColorHint="#d111"
+                    android:background="#dfff"
+                    android:text="Sign-up with email"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="5dp"
                 android:background="#8fff"
                 />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/client_secret"
-                android:textColor="#d111"
-                android:textColorHint="#d111"
-                android:background="#dfff"
-                android:hint="client_secret"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#8fff"
-                />
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +155,7 @@
                 android:textColor="#d111"
                 android:textColorHint="#d111"
                 android:background="#dfff"
-                android:hint="token"
+                android:hint="facebook token"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"
@@ -157,11 +169,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/sign"
+                android:id="@+id/connect_facebook"
                 android:textColor="#d111"
                 android:textColorHint="#d111"
                 android:background="#dfff"
-                android:text="Sign"
+                android:text="Sign-in with facebook access token"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingTop="15dp"

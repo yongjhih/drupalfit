@@ -33,7 +33,10 @@ import android.widget.Toast;
 
 import drupalfit.DrupalManager;
 import drupalfit.DrupalService;
-import drupalfit.DrupalService.User;
+import drupalfit.DrupalService.*;
+import drupalfit.DrupalOAuth2Manager;
+import drupalfit.DrupalOAuth2;
+import drupalfit.DrupalOAuth2.*;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -47,10 +50,15 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnLongClick;
 
-import drupalfit.DrupalOAuth2Manager;
 import drupalfit.Log8;
 
 import android.net.Uri;
+import android.text.TextUtils;
+import android.content.Context;
+
+import com.github.johnpersano.supertoasts.SuperToast;
+import com.github.johnpersano.supertoasts.SuperActivityToast;
+import android.view.inputmethod.InputMethodManager;
 
 public class HomeActivity extends ToolBarActivity {
     @InjectView(R.id.email)
@@ -59,15 +67,96 @@ public class HomeActivity extends ToolBarActivity {
     EditText password;
     @InjectView(R.id.endpoint)
     EditText endpoint;
-    @InjectView(R.id.client_id)
-    EditText clientId;
-    @InjectView(R.id.client_secret)
-    EditText clientSecret;
     @InjectView(R.id.token)
     EditText token;
+    @InjectView(R.id.content)
+    View view;
 
-    @OnClick(R.id.sign)
-    public void sign() {
+    private void hideSoftInputFromWindow() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void progress() {
+        hideSoftInputFromWindow();
+        SuperActivityToast.cancelAllSuperActivityToasts();
+        SuperActivityToast superActivityToast = new SuperActivityToast(HomeActivity.this, SuperToast.Type.PROGRESS);
+        superActivityToast.setText("Progressing...");
+        superActivityToast.setIndeterminate(true);
+        superActivityToast.setProgressIndeterminate(true);
+        superActivityToast.show();
+    }
+
+    private void done() {
+        SuperActivityToast.cancelAllSuperActivityToasts();
+    }
+
+    @OnClick(R.id.signin)
+    public void signin() {
+        if (TextUtils.isEmpty(endpoint.getText().toString())) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progress();
+
+        DrupalManager.get()
+            .setEndpoint(endpoint.getText().toString())
+            .build();
+
+        DrupalManager.get().userLogin(email.getText().toString(), password.getText().toString(), new Callback<Login>() {
+            @Override
+            public void success(Login login, Response response) {
+                done();
+                Toast.makeText(HomeActivity.this, "success: " + "uid:" + login.user.uid + ", name: " + login.user.name, Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                done();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+                Log8.d(error);
+            }
+        });
+    }
+
+    @OnClick(R.id.signup)
+    public void signup() {
+        if (TextUtils.isEmpty(endpoint.getText().toString())) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progress();
+
+        DrupalManager.get()
+            .setEndpoint(endpoint.getText().toString())
+            .build();
+
+        DrupalManager.get().userRegister(email.getText().toString(), password.getText().toString(), new Callback<User>() {
+            @Override
+            public void success(User user, Response response) {
+                done();
+                Toast.makeText(HomeActivity.this, "success: " + "uid:" + user.uid + ", name: " + user.name, Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                done();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+                Log8.d(error);
+            }
+        });
+    }
+
+    @OnClick(R.id.connect_facebook)
+    public void connectFacebook() {
+        if (TextUtils.isEmpty(endpoint.getText().toString())) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progress();
+
         String restEndpoint = endpoint.getText().toString();
         Uri uri = Uri.parse(restEndpoint);
         String oauthEndpoint = uri.getScheme() + "://" + uri.getAuthority() + "/oauth2";
@@ -77,24 +166,23 @@ public class HomeActivity extends ToolBarActivity {
             .setOAuth(
                 new DrupalOAuth2Manager.Builder()
                     .setEndpoint(oauthEndpoint)
-                    .setClientId(clientId.getText().toString())
-                    .setClientSecret(clientSecret.getText().toString())
                     .setProvider(HomeActivity.this, DrupalOAuth2Manager.FACEBOOK, token.getText().toString())
                     .build()
             ).build();
 
-        DrupalManager.get().userProfile(new Callback<User>() {
+        DrupalManager.get().userProfile(new Callback<User>() { // direct access profile, DrupalManager will try to connect
             @Override
             public void success(User user, Response response) {
-                Toast.makeText(HomeActivity.this, "success: " + "uid:" + user.uid + ", name: " + user.name + ", accessToken: " + DrupalManager.get().getAccessToken(), Toast.LENGTH_SHORT).show();
+                done();
+                Toast.makeText(HomeActivity.this, "success: " + "uid:" + user.uid + ", name: " + user.name, Toast.LENGTH_SHORT).show();
                 Log8.d(user.name);
                 Log8.d(user.mail);
                 Log8.d(user.uid);
-                Log8.d(DrupalManager.get().getAccessToken());
             }
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+                done();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
                 Log8.d(error);
             }
         });
