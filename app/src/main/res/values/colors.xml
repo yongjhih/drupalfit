@@ -15,11 +15,18 @@
   -->
 
 <resources>
-    <color name="colorPrimary">@color/material_deep_teal_200</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1E88E5</color>
+
+    <color name="colorSecondary">#2196F3</color>
+    <color name="colorSecondaryDark">#1E88E5</color>
+
+    <!--color name="colorPrimary">@color/material_deep_teal_200</color>
     <color name="colorPrimaryDark">@color/material_deep_teal_500</color>
 
     <color name="colorSecondary">@color/material_deep_teal_200</color>
-    <color name="colorSecondaryDark">@color/material_deep_teal_500</color>
+    <color name="colorSecondaryDark">@color/material_deep_teal_500</color-->
+
 
     <color name="windowBackgroundColor">#ddd</color>
     <color name="black_translucent">#80000000</color>
