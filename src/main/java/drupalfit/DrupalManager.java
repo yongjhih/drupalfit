@@ -212,6 +212,7 @@ public class DrupalManager implements DrupalService {
             }
             mRequestInterceptor.cookie = cookie;
             mRequestInterceptor.accessToken = accessToken;
+            mRequestInterceptor.xcsrfToken = mXCsrfToken;
 
             mService = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
@@ -242,11 +243,15 @@ public class DrupalManager implements DrupalService {
     public class SimpleRequestInterceptor implements RequestInterceptor {
         public String cookie;
         public String accessToken;
+        public String xcsrfToken;
 
         @Override
         public void intercept(RequestFacade request) {
             if (!TextUtils.isEmpty(cookie)) {
                 request.addHeader("Cookie", cookie);
+            }
+            if (!TextUtils.isEmpty(mXCsrfToken)) {
+                request.addHeader("X-CSRF-Token", xcsrfToken);
             }
             if (!TextUtils.isEmpty(accessToken)) {
                 Log8.d();
@@ -254,6 +259,16 @@ public class DrupalManager implements DrupalService {
                 request.addEncodedQueryParam("access_token", accessToken);
             }
         }
+    }
+
+    public DrupalManager setXCsrfToken(String xcsrfToken) {
+        mXCsrfToken = xcsrfToken;
+
+        if (mRequestInterceptor != null) {
+            mRequestInterceptor.xcsrfToken = xcsrfToken;
+        }
+
+        return sInstance;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
