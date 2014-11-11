@@ -180,6 +180,46 @@
                 android:paddingBottom="15dp"
                 android:gravity="center"
                 />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="#8fff"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/nid"
+                android:textColor="#d111"
+                android:textColorHint="#d111"
+                android:background="#dfff"
+                android:hint="Node id"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/get_node"
+                android:textColor="#d111"
+                android:textColorHint="#d111"
+                android:background="#dfff"
+                android:text="Get Node"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:gravity="center"
+                />
+
         </LinearLayout>
 
         <ListView

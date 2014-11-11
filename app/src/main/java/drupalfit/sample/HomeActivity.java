@@ -71,6 +71,8 @@ public class HomeActivity extends ToolBarActivity {
     EditText token;
     @InjectView(R.id.content)
     View view;
+    @InjectView(R.id.nid)
+    EditText nid;
 
     private void hideSoftInputFromWindow() {
         InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -95,7 +97,7 @@ public class HomeActivity extends ToolBarActivity {
     @OnClick(R.id.signin)
     public void signin() {
         if (TextUtils.isEmpty(endpoint.getText().toString())) {
-            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -114,7 +116,7 @@ public class HomeActivity extends ToolBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 done();
-                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_LONG).show();
                 Log8.d(error);
             }
         });
@@ -123,7 +125,7 @@ public class HomeActivity extends ToolBarActivity {
     @OnClick(R.id.signup)
     public void signup() {
         if (TextUtils.isEmpty(endpoint.getText().toString())) {
-            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -142,7 +144,7 @@ public class HomeActivity extends ToolBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 done();
-                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_LONG).show();
                 Log8.d(error);
             }
         });
@@ -151,7 +153,7 @@ public class HomeActivity extends ToolBarActivity {
     @OnClick(R.id.connect_facebook)
     public void connectFacebook() {
         if (TextUtils.isEmpty(endpoint.getText().toString())) {
-            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -174,7 +176,7 @@ public class HomeActivity extends ToolBarActivity {
             @Override
             public void success(User user, Response response) {
                 done();
-                Toast.makeText(HomeActivity.this, "success: " + "uid:" + user.uid + ", name: " + user.name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "success: " + "uid:" + user.uid + ", name: " + user.name, Toast.LENGTH_LONG).show();
                 Log8.d(user.name);
                 Log8.d(user.mail);
                 Log8.d(user.uid);
@@ -182,7 +184,39 @@ public class HomeActivity extends ToolBarActivity {
             @Override
             public void failure(RetrofitError error) {
                 done();
-                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_LONG).show();
+                Log8.d(error);
+            }
+        });
+    }
+
+    @OnClick(R.id.get_node)
+    public void getNode() {
+        if (TextUtils.isEmpty(endpoint.getText().toString())) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(nid.getText().toString())) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        progress();
+
+        DrupalManager.get()
+            .setEndpoint(endpoint.getText().toString())
+            .build();
+
+        DrupalManager.get().getNode(nid.getText().toString(), new Callback<Node>() {
+            @Override
+            public void success(Node node, Response response) {
+                done();
+                Toast.makeText(HomeActivity.this, "success: " + node, Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                done();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_LONG).show();
                 Log8.d(error);
             }
         });
