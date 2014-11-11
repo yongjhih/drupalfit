@@ -101,36 +101,26 @@ public class HomeActivity extends ToolBarActivity {
         });
     }
 
-    private DrawerLayout drawer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setActionBarIcon(R.drawable.ic_ab_drawer);
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer);
-        drawer.setDrawerShadow(R.drawable.drawer_shadow, Gravity.START);
     }
 
-    @Override protected int getContentView() {
+    /** {@inheritDoc} */
+    @Override
+    protected int getContentView() {
         return R.layout.activity_home;
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawer.openDrawer(Gravity.START);
-                return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 }

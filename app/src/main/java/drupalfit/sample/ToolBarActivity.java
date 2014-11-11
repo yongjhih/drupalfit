@@ -19,30 +19,49 @@ package drupalfit.sample;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
 
 public abstract class ToolBarActivity extends ActionBarActivity {
-
-    private Toolbar toolbar;
+    @InjectView(R.id.toolbar)
+    protected Toolbar toolbar;
+    @InjectView(R.id.drawer)
+    protected DrawerLayout drawerLayout;
+    protected ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentView());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ButterKnife.inject(this);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
+            toggle.setDrawerIndicatorEnabled(true);
+            drawerLayout.setDrawerListener(toggle);
         }
-        ButterKnife.inject(this);
     }
 
     protected abstract int getContentView();
 
-    protected void setActionBarIcon(int iconRes) {
-        toolbar.setNavigationIcon(iconRes);
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (toggle.onOptionsItemSelected(item))
+            return true;
+
+        return super.onOptionsItemSelected(item);
     }
 }
