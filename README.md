@@ -43,9 +43,22 @@ DrupalManager.get().getService("https://example.com/api").userLogin("foo", "pass
 * userLogout (after userLogin)
 
 ```java
-DrupalManager.get().userLogout(new Callback<Logout>() {
+DrupalManager.get().getService("https://example.com/api").userLogout(new Callback<Logout>() {
     @Override
     public void success(Logout logout, Response response) {
+    }
+    @Override
+    public void failure(RetrofitError error) {
+    }
+});
+```
+
+* getNode
+
+```java
+DrupalManager.get().getService("https://example.com/api").getNode(1, new Callback<Node>() {
+    @Override
+    public void success(Node node, Response response) {
     }
     @Override
     public void failure(RetrofitError error) {
