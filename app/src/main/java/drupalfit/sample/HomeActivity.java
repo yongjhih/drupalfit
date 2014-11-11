@@ -68,7 +68,6 @@ public class HomeActivity extends ToolBarActivity {
 
     @OnClick(R.id.sign)
     public void sign() {
-        //DrupalManager.get().getService(endpoint.getText().toString()).userRegister(email.getText().toString(), email.getText().toString(), password.getText().toString(), new Callback<User>() {
         String restEndpoint = endpoint.getText().toString();
         Uri uri = Uri.parse(restEndpoint);
         String oauthEndpoint = uri.getScheme() + "://" + uri.getAuthority() + "/oauth2";
