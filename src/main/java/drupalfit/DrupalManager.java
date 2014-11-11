@@ -313,4 +313,54 @@ public class DrupalManager implements DrupalService {
 
         return sTrustedVerifier;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void systemConnect(
+        Callback<User> callback
+    ) {
+        getService().systemConnect(callback);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void getNode(
+        int nid,
+        Callback<Node> callback
+    ) {
+        getService().getNode(nid, callback);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void getTaxonomyVocabulary(
+        int vid,
+        int parent,
+        Callback<Vocabulary> callback
+    ) {
+        getService().getTaxonomyVocabulary(vid, parent, callback);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void getTaxonomyVocabulary(
+        int vid,
+        int parent,
+        int maxdepth,
+        Callback<Vocabulary> callback
+    ) {
+        getService().getTaxonomyVocabulary(vid, parent, maxdepth, callback);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void getViews(
+        String name,
+        int limit,
+        String args,
+        int displayId,
+        Callback<Views> callback
+    ) {
+        getService().getViews(name, limit, args, displayId, callback);
+    }
 }

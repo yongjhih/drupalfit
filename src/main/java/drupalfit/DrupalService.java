@@ -239,7 +239,7 @@ public interface DrupalService {
      */
     @FormUrlEncoded
     @POST("/user/login.json")
-    void userLogin(
+    void userLogin( // TODO login()
         @Field("username") String username,
         @Field("password") String password,
         Callback<Login> callback
@@ -256,13 +256,13 @@ public interface DrupalService {
      * Example: &access_token or with cookie/session header
      */
     @POST("/user/profile.json")
-    void userProfile(
+    void userProfile( // TODO getProfile()
         Callback<User> callback
     );
 
     @FormUrlEncoded
     @POST("/user/profile.json")
-    void userProfile(
+    void userProfile(// TODO getProfile()
         @Field("access_token") String accessToken,
         Callback<User> callback
     );
@@ -291,7 +291,7 @@ public interface DrupalService {
      * Expected Response(in JSON): 1
      */
     @POST("/user/logout.json")
-    void userLogout(
+    void userLogout(// TODO logout
         Callback<Logout> callback
     );
 
@@ -305,4 +305,78 @@ public interface DrupalService {
         // [true]
     }
 
+    @POST("/system/connect.json")
+    void systemConnect(
+        Callback<User> callback
+    );
+
+    @GET("/node/{nid}.json")
+    void getNode(
+        @Path("nid") int nid,
+        Callback<Node> callback
+    );
+
+    /**
+     * Args:
+     * HTTP Method : GET
+     * Example URL : http://drupal6-services/services/plist/node/1
+     * Expected Response(in JSON): {"nid":"1","type":"story","language":"","uid":"0","status":"0","created":"1286592762","changed":"1286592762","comment":"2","promote":"0","moderate":"0","sticky":"0","tined":"0","translate":"0","vid":"1","revision_uid":"1","title":"test","body":"test","teaser":"test","log":"","revision_timestamp":"1286592762","format":"1","name":"","picture":"","data":null,"last_comment_timestamp":"1286592762","last_comment_name":null,"comment_count":"0","taxonomy":[],"files":[],"uric":"http:\/\/drupal6-services\/services\/plist\/node\/1"}
+     */
+    @Keep
+    @KeepClassMembers
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Node {
+        public Node() {
+        }
+
+        public int nid;
+        public int uid;
+        public String title;
+        public String body;
+        public String type;
+        public long created; // TODO Date
+        public long changed; // TODO Date
+    }
+
+    @Keep
+    @KeepClassMembers
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Vocabulary {
+        public Vocabulary() {
+        }
+    }
+
+    @FormUrlEncoded
+    @POST("/taxonomy_vocabulary/getTree.json")
+    void getTaxonomyVocabulary(
+        @Field("vid") int vid,
+        @Field("parent") int parent,
+        Callback<Vocabulary> callback
+    );
+
+    @FormUrlEncoded
+    @POST("/taxonomy_vocabulary/getTree.json")
+    void getTaxonomyVocabulary(
+        @Field("vid") int vid,
+        @Field("parent") int parent,
+        @Field("maxdepth") int maxdepth,
+        Callback<Vocabulary> callback
+    );
+
+    @Keep
+    @KeepClassMembers
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Views {
+        public Views() {
+        }
+    }
+
+    @GET("/views/{name}.json?limit={limit}&offset={offset}&args={args}&display_id={displayId}")
+    void getViews(
+        @Path("name") String name,
+        @Path("limit") int limit,
+        @Path("args") String args,
+        @Path("display_id") int displayId,
+        Callback<Views> callback
+    );
 }
