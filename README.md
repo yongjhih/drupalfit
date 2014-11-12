@@ -14,10 +14,16 @@ A drupal services rest client with retrofit for android
 Usage
 =====
 
+* Initialization
+
+```java
+DrupalManager.get().setEndpoint("https://example.com/api");
+```
+
 * register
 
 ```java
-DrupalManager.get().getService("https://example.com/api").register("foo", "foo@example.com", "password", new Callback<User>() {
+DrupalManager.get().register("foo", "foo@example.com", "password", new Callback<User>() {
     @Override
     public void success(User user, Response response) {
     }
@@ -30,7 +36,7 @@ DrupalManager.get().getService("https://example.com/api").register("foo", "foo@e
 * login
 
 ```java
-DrupalManager.get().getService("https://example.com/api").login("foo", "password", new Callback<Login>() {
+DrupalManager.get().login("foo", "password", new Callback<Login>() {
     @Override
     public void success(Login login, Response response) {
     }
@@ -43,7 +49,7 @@ DrupalManager.get().getService("https://example.com/api").login("foo", "password
 * logout (after userLogin)
 
 ```java
-DrupalManager.get().getService("https://example.com/api").logout(new Callback<Logout>() {
+DrupalManager.get().logout(new Callback<Logout>() {
     @Override
     public void success(Logout logout, Response response) {
     }
@@ -56,7 +62,7 @@ DrupalManager.get().getService("https://example.com/api").logout(new Callback<Lo
 * getNode
 
 ```java
-DrupalManager.get().getService("https://example.com/api").getNode(1, new Callback<Node>() {
+DrupalManager.get().getNode(1, new Callback<Node>() {
     @Override
     public void success(Node node, Response response) {
     }
@@ -72,10 +78,7 @@ Bonus
 * getProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth))
 
 ```java
-DrupalManager.get()
-    .setEndpoint("https://example.com/api")
-    .setProvider(this, DrupalOAuth2Manager.FACEBOOK, "facebook_token")
-    .build();
+DrupalManager.get().setProvider(this, DrupalManager.FACEBOOK, "faceb00k_t0ken");
 
 DrupalManager.get().getProfile(new Callback<User>() {
     @Override
