@@ -69,19 +69,13 @@ DrupalManager.get().getService("https://example.com/api").getNode(1, new Callbac
 Bonus
 =====
 
-* getProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth) + oauth2_server + oauth2_login_provider)
+* getProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth))
 
 ```java
 DrupalManager.get()
     .setEndpoint("https://example.com/api")
-    .setOAuth(
-        new DrupalOAuth2Manager.Builder()
-            .setEndpoint("https://example.com/oauth2")
-            .setClientId("client_id")
-            .setClientSecret("client_secret")
-            .setProvider(this, DrupalOAuth2Manager.FACEBOOK, "facebook_token")
-            .build()
-    ).build();
+    .setProvider(this, DrupalOAuth2Manager.FACEBOOK, "facebook_token")
+    .build();
 
 DrupalManager.get().getProfile(new Callback<User>() {
     @Override
