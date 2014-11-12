@@ -492,7 +492,6 @@ public interface DrupalService {
         Callback<Login> callback
     );
 
-    @FormUrlEncoded
     @POST("/token.json")
     void getToken(
         Callback<Login> callback

@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.security.SecureRandom;
 import android.text.TextUtils;
 import drupalfit.DrupalOAuth2.Credential;
+import android.net.Uri;
+import android.content.Context;
 
 public class DrupalManager implements DrupalService {
     private static DrupalManager sInstance = new DrupalManager();
@@ -43,18 +45,127 @@ public class DrupalManager implements DrupalService {
     private String endpoint;
     private String accessToken;
     private String cookie;
-    private String mXCsrfToken; //X-CSRF-Token
+    private String xcsrfToken; //X-CSRF-Token
     private String username; // TODO
     private String email; // TODO
     private String password; // TODO
+
+    /**
+     * hybridauth_ulogin/hybridauth_ulogin.admin.inc
+     *
+     * "vkontakte" => "Vkontakte",
+     * "odnoklassniki" => "Odnoklassniki",
+     * "mailru" => "Mailru",
+     * "facebook" => "Facebook",
+     * "twitter" => "Twitter",
+     * "google" => "Google",
+     * "yandex" => "Yandex",
+     * "livejournal" => "",
+     * "openid" => "OpenID",
+     * "lastfm" => "LastFM",
+     * "linkedin" => "LinkedIn",
+     * "liveid" => "Live",
+     * "soundcloud" => "",
+     * "steam" => "Steam",
+     * "flickr" => "",
+     * "vimeo" => "",
+     * "youtube" => "",
+     * "webmoney" => "",
+     *
+     * additional-providers/hybridauth-/Providers/
+     *
+     * px500
+     * Deezer
+     * Disqus
+     * Draugiem
+     * DrupalOAuth2
+     * Freeagent
+     * GitHub
+     * Goodreads
+     * Google
+     * Identica
+     * Instagram
+     * LastFM
+     * Latch
+     * Mailru
+     * Murmur
+     * Odnoklassniki
+     * PaypalOpenID
+     * Paypal
+     * PixelPin
+     * Pixnet
+     * Plurk
+     * QQ
+     * Sina
+     * Skyrock
+     * Steam
+     * Tumblr
+     * TwitchTV
+     * Viadeo
+     * Vimeo
+     * Vkontakte
+     * XING
+     * Yahoo
+     * Yammer
+     * Yandex
+     */
+    public static final String DEEZER        = "Deezer";
+    public static final String DISQUS        = "Disqus";
+    public static final String DRAUGIEM      = "Draugiem";
+    public static final String DRUPALOAUTH2  = "DrupalOAuth2";
+    public static final String FACEBOOK      = "Facebook";
+    public static final String FLICKR        = "flickr";
+    public static final String FREEAGENT     = "Freeagent";
+    public static final String GITHUB        = "GitHub";
+    public static final String GOODREADS     = "Goodreads";
+    public static final String GOOGLE        = "Google";
+    public static final String IDENTICA      = "Identica";
+    public static final String INSTAGRAM     = "Instagram";
+    public static final String LASTFM        = "LastFM";
+    public static final String LATCH         = "Latch";
+    public static final String LINKEDIN      = "LinkedIn";
+    public static final String LIVEJOURNAL   = "livejournal";
+    public static final String LIVE          = "Live";
+    public static final String MAILRU        = "Mailru";
+    public static final String MURMUR        = "Murmur";
+    public static final String ODNOKLASSNIKI = "Odnoklassniki";
+    public static final String OPENID        = "OpenID";
+    public static final String PAYPALOPENID  = "PaypalOpenID";
+    public static final String PAYPAL        = "Paypal";
+    public static final String PIXELPIN      = "PixelPin";
+    public static final String PIXNET        = "Pixnet";
+    public static final String PLURK         = "Plurk";
+    public static final String PX500         = "px500";
+    public static final String QQ            = "QQ";
+    public static final String SINA          = "Sina";
+    public static final String SKYROCK       = "Skyrock";
+    public static final String SOUNDCLOUD    = "soundcloud";
+    public static final String STEAM         = "Steam";
+    public static final String TUMBLR        = "Tumblr";
+    public static final String TWITCHTV      = "TwitchTV";
+    public static final String TWITTER       = "Twitter";
+    public static final String VIADEO        = "Viadeo";
+    public static final String VIMEO         = "vimeo";
+    public static final String VKONTAKTE     = "Vkontakte";
+    public static final String WEBMONEY      = "webmoney";
+    public static final String XING          = "XING";
+    public static final String YAHOO         = "Yahoo";
+    public static final String YAMMER        = "Yammer";
+    public static final String YANDEX        = "Yandex";
+    public static final String YOUTUBE       = "youtube";
+
+    protected String provider = FACEBOOK;
+    protected String token;
 
     protected SimpleRequestInterceptor mRequestInterceptor;
 
     private DrupalOAuth2Manager oauth;
 
+    protected Context context;
+
     public DrupalManager setOAuth(DrupalOAuth2Manager oauth) {
         this.oauth = oauth;
-        return sInstance;
+        return this;
     }
 
     public DrupalOAuth2Manager getOAuth() {
@@ -63,12 +174,33 @@ public class DrupalManager implements DrupalService {
 
     public DrupalManager setEndpoint(String endpoint) {
         this.endpoint = endpoint;
-        return sInstance;
+        return this;
+    }
+
+    public DrupalManager setContext(Context context) {
+        this.context = context;
+        return this;
+    }
+
+    public DrupalManager setProvider(String provider) {
+        this.provider = provider;
+        return this;
+    }
+
+    public DrupalManager setProvider(Context context, String provider, String token) {
+        setContext(context);
+        setProvider(provider);
+        setToken(token);
+        return this;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public DrupalManager build() {
         getService(endpoint);
-        return sInstance;
+        return this;
     }
 
     private DrupalManager() {
@@ -130,7 +262,37 @@ public class DrupalManager implements DrupalService {
                     public void success(Credential credential, Response response) {
                         setAccessToken(credential.access_token);
                         Log8.d(accessToken);
-                        getService().userProfile(callback);
+                        getService().getProfile(callback);
+                    }
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log8.d();
+                        callback.failure(error);
+                    }
+                });
+            } else if (TextUtils.isEmpty(cookie) && context != null && !TextUtils.isEmpty(provider) && !TextUtils.isEmpty(token)) {
+                getCookie(context, provider, token, new Callback<String>() {
+                    @Override
+                    public void success(String cookie, Response response) {
+                        Log8.d(cookie);
+                        setCookie(cookie);
+                        if (TextUtils.isEmpty(xcsrfToken)) {
+                            getToken(new Callback<Login>() {
+                                @Override
+                                public void success(Login login, Response response) {
+                                    Log8.d(login.token);
+                                    setXcsrfToken(login.token);
+                                    getService().getProfile(callback);
+                                }
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Log8.d();
+                                    callback.failure(error);
+                                }
+                            });
+                        } else {
+                            getService().getProfile(callback);
+                        }
                     }
                     @Override
                     public void failure(RetrofitError error) {
@@ -194,7 +356,7 @@ public class DrupalManager implements DrupalService {
             mRequestInterceptor.accessToken = accessToken;
         }
 
-        return sInstance;
+        return this;
     }
 
     public DrupalService getService(String endpoint) {
@@ -212,7 +374,7 @@ public class DrupalManager implements DrupalService {
             }
             mRequestInterceptor.cookie = cookie;
             mRequestInterceptor.accessToken = accessToken;
-            mRequestInterceptor.xcsrfToken = mXCsrfToken;
+            mRequestInterceptor.xcsrfToken = xcsrfToken;
 
             mService = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
@@ -237,7 +399,21 @@ public class DrupalManager implements DrupalService {
             mRequestInterceptor.cookie = cookie;
         }
 
-        return sInstance;
+        return this;
+    }
+
+    /**
+     * https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999
+     *
+     * Allow sign-up with access_token.
+     */
+    private void getCookie(Context context, String provider, String token, Callback<String> callback) {
+        if (context == null) return;
+        if (TextUtils.isEmpty(token)) return;
+
+        Uri uri = Uri.parse(endpoint);
+
+        new WebDialog(context, uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token, callback).show();
     }
 
     public class SimpleRequestInterceptor implements RequestInterceptor {
@@ -250,7 +426,7 @@ public class DrupalManager implements DrupalService {
             if (!TextUtils.isEmpty(cookie)) {
                 request.addHeader("Cookie", cookie);
             }
-            if (!TextUtils.isEmpty(mXCsrfToken)) {
+            if (!TextUtils.isEmpty(xcsrfToken)) {
                 request.addHeader("X-CSRF-Token", xcsrfToken);
             }
             if (!TextUtils.isEmpty(accessToken)) {
@@ -261,14 +437,14 @@ public class DrupalManager implements DrupalService {
         }
     }
 
-    public DrupalManager setXCsrfToken(String xcsrfToken) {
-        mXCsrfToken = xcsrfToken;
+    public DrupalManager setXcsrfToken(String xcsrfToken) {
+        this.xcsrfToken = xcsrfToken;
 
         if (mRequestInterceptor != null) {
             mRequestInterceptor.xcsrfToken = xcsrfToken;
         }
 
-        return sInstance;
+        return this;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
