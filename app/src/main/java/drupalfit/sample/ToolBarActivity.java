@@ -28,16 +28,36 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.InjectViews;
 
-public abstract class ToolBarActivity extends ActionBarActivity {
+import android.accounts.AccountManager;
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+
+import android.text.TextUtils;
+import android.content.Intent;
+
+public abstract class ToolBarActivity extends ActionBarActivity implements AccountAuthenticator {
     @InjectView(R.id.toolbar)
     protected Toolbar toolbar;
     @InjectView(R.id.drawer)
     protected DrawerLayout drawerLayout;
     protected ActionBarDrawerToggle toggle;
 
+    private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
+    private Bundle mResultBundle = null;
+
+    private AccountManager mAccountManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAccountAuthenticatorResponse =
+                getIntent().getParcelableExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE);
+
+        if (mAccountAuthenticatorResponse != null) {
+            mAccountAuthenticatorResponse.onRequestContinued();
+        }
+
         setContentView(getContentView());
         ButterKnife.inject(this);
         if (toolbar != null) {
@@ -63,5 +83,59 @@ public abstract class ToolBarActivity extends ActionBarActivity {
             return true;
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public final void setAccountAuthenticatorResult(Bundle result) {
+        mResultBundle = result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void addAccount(String username, String password, String authToken) {
+        String accountType = "drualfit";
+        String authTokenType = "drualfit";
+        Account account = new Account(username, accountType);
+        Bundle userdata = null;
+
+        Intent intent = new Intent();
+
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+        intent.putExtra(AccountManager.KEY_AUTHTOKEN, authToken);
+
+        if (TextUtils.isEmpty(password)) {
+            boolean added = getAccountManager().addAccountExplicitly(account, password, userdata);
+        } else {
+            getAccountManager().setPassword(account, password);
+        }
+
+        getAccountManager().setAuthToken(account, authTokenType, authToken);
+
+        setAccountAuthenticatorResult(intent.getExtras());
+        setResult(RESULT_OK, intent);
+    }
+
+    private AccountManager getAccountManager() {
+        if (mAccountManager == null) {
+            mAccountManager = AccountManager.get(this);
+        }
+        return mAccountManager;
+    }
+
+    @Override
+    public void finish() {
+        if (mAccountAuthenticatorResponse != null) {
+            // send the result bundle back if set, otherwise send an error.
+            if (mResultBundle != null) {
+                mAccountAuthenticatorResponse.onResult(mResultBundle);
+            } else {
+                mAccountAuthenticatorResponse.onError(AccountManager.ERROR_CODE_CANCELED,
+                        "canceled");
+            }
+            mAccountAuthenticatorResponse = null;
+        }
+        super.finish();
     }
 }
