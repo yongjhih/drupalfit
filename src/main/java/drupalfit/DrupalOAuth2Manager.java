@@ -50,6 +50,7 @@ public class DrupalOAuth2Manager {
     protected String username;
     protected String password;
 
+    // TODO merge into DrupalManager about hybridauth
     /**
      * hybridauth_ulogin/hybridauth_ulogin.admin.inc
      *
