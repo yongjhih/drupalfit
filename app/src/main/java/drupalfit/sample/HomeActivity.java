@@ -107,7 +107,7 @@ public class HomeActivity extends ToolBarActivity {
             .setEndpoint(endpoint.getText().toString())
             .build();
 
-        DrupalManager.get().userLogin(email.getText().toString(), password.getText().toString(), new Callback<Login>() {
+        DrupalManager.get().login(email.getText().toString(), password.getText().toString(), new Callback<Login>() {
             @Override
             public void success(Login login, Response response) {
                 done();
@@ -135,7 +135,7 @@ public class HomeActivity extends ToolBarActivity {
             .setEndpoint(endpoint.getText().toString())
             .build();
 
-        DrupalManager.get().userRegister(email.getText().toString(), password.getText().toString(), new Callback<User>() {
+        DrupalManager.get().register(email.getText().toString(), password.getText().toString(), new Callback<User>() {
             @Override
             public void success(User user, Response response) {
                 done();
@@ -165,14 +165,10 @@ public class HomeActivity extends ToolBarActivity {
 
         DrupalManager.get()
             .setEndpoint(restEndpoint)
-            .setOAuth(
-                new DrupalOAuth2Manager.Builder()
-                    .setEndpoint(oauthEndpoint)
-                    .setProvider(HomeActivity.this, DrupalOAuth2Manager.FACEBOOK, token.getText().toString())
-                    .build()
-            ).build();
+            .setProvider(this, DrupalOAuth2Manager.FACEBOOK, token.getText().toString())
+            .build();
 
-        DrupalManager.get().userProfile(new Callback<User>() { // direct access profile, DrupalManager will try to connect
+        DrupalManager.get().getProfile(new Callback<User>() { // direct access profile, DrupalManager will try to connect
             @Override
             public void success(User user, Response response) {
                 done();

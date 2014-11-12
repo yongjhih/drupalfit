@@ -75,7 +75,7 @@ public class DrupalManager implements DrupalService {
     }
 
     @Override
-    public void userRegister(
+    public void register(
         String username,
         String email,
         String password,
@@ -85,19 +85,19 @@ public class DrupalManager implements DrupalService {
         this.password = password;
         this.email = email;
         */
-        getService().userRegister(username, email, password, callback);
+        getService().register(username, email, password, callback);
     }
 
-    public void userRegister(
+    public void register(
         String email,
         String password,
         Callback<User> callback
     ) {
-        userRegister(email, email, password, callback);
+        register(email, email, password, callback);
     }
 
     @Override
-    public void userLogin(
+    public void login(
         String username,
         String password,
         Callback<Login> callback
@@ -106,20 +106,20 @@ public class DrupalManager implements DrupalService {
         this.username = username;
         this.password = password;
         */
-        getService().userLogin(username, password, callback);
+        getService().login(username, password, callback);
     }
 
     @Override
-    public void userProfile(
+    public void getProfile(
         String accessToken,
         final Callback<User> callback
     ) {
         setAccessToken(accessToken);
-        getService().userProfile(accessToken, callback);
+        getService().getProfile(accessToken, callback);
     }
 
     @Override
-    public void userProfile(
+    public void getProfile(
         final Callback<User> callback
     ) {
         if (cookie == null && accessToken == null) {
@@ -141,15 +141,15 @@ public class DrupalManager implements DrupalService {
             }
         } else {
             Log8.d();
-            getService().userProfile(callback);
+            getService().getProfile(callback);
         }
     }
 
     @Override
-    public void userLogout(
+    public void logout(
         Callback<Logout> callback
     ) {
-        getService().userLogout(callback);
+        getService().logout(callback);
     }
 
     public static DrupalManager get() {
@@ -395,17 +395,20 @@ public class DrupalManager implements DrupalService {
 
     /** {@inheritDoc} */
     @Override
-    public void token(
+    public void getToken(
         String username,
         String password,
         Callback<Login> callback
     ) {
-        getService().token(username, password, callback);
+        getService().getToken(username, password, callback);
     }
 
-    public void token(
+    /** {@inheritDoc} */
+    @Override
+    public void getToken(
         Callback<Login> callback
     ) {
-        token(username, password, callback);
+        getService().getToken(callback);
     }
+
 }

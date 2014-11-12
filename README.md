@@ -14,10 +14,10 @@ A drupal services rest client with retrofit for android
 Usage
 =====
 
-* userRegister
+* register
 
 ```java
-DrupalManager.get().getService("https://example.com/api").userRegister("foo", "foo@example.com", "password", new Callback<User>() {
+DrupalManager.get().getService("https://example.com/api").register("foo", "foo@example.com", "password", new Callback<User>() {
     @Override
     public void success(User user, Response response) {
     }
@@ -27,10 +27,10 @@ DrupalManager.get().getService("https://example.com/api").userRegister("foo", "f
 });
 ```
 
-* userLogin
+* login
 
 ```java
-DrupalManager.get().getService("https://example.com/api").userLogin("foo", "password", new Callback<Login>() {
+DrupalManager.get().getService("https://example.com/api").login("foo", "password", new Callback<Login>() {
     @Override
     public void success(Login login, Response response) {
     }
@@ -40,10 +40,10 @@ DrupalManager.get().getService("https://example.com/api").userLogin("foo", "pass
 });
 ```
 
-* userLogout (after userLogin)
+* logout (after userLogin)
 
 ```java
-DrupalManager.get().getService("https://example.com/api").userLogout(new Callback<Logout>() {
+DrupalManager.get().getService("https://example.com/api").logout(new Callback<Logout>() {
     @Override
     public void success(Logout logout, Response response) {
     }
@@ -69,7 +69,7 @@ DrupalManager.get().getService("https://example.com/api").getNode(1, new Callbac
 Bonus
 =====
 
-* userProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth) + oauth2_server + oauth2_login_provider)
+* getProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth) + oauth2_server + oauth2_login_provider)
 
 ```java
 DrupalManager.get()
@@ -83,7 +83,7 @@ DrupalManager.get()
             .build()
     ).build();
 
-DrupalManager.get().userProfile(new Callback<User>() {
+DrupalManager.get().getProfile(new Callback<User>() {
     @Override
     public void success(User user, Response response) {
     }

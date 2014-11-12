@@ -128,7 +128,6 @@ import proguard.annotation.KeepClassMembers;
  */
 public interface DrupalService {
     /**
-     * userRegister.
      * Args: account*
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/user
@@ -163,7 +162,7 @@ public interface DrupalService {
      */
     @FormUrlEncoded
     @POST("/user/register.json")
-    void userRegister(
+    void register(
         @Field("name") String username,
         @Field("mail") String email,
         @Field("pass") String password,
@@ -173,7 +172,7 @@ public interface DrupalService {
     /*
     @FormUrlEncoded
     @POST("/user/register")
-    void userRegister(
+    void register(
         @Field("mail") String email,
         @Field("pass") String password,
         Callback<User> callback
@@ -239,7 +238,7 @@ public interface DrupalService {
      */
     @FormUrlEncoded
     @POST("/user/login.json")
-    void userLogin( // TODO login()
+    void login(
         @Field("username") String username,
         @Field("password") String password,
         Callback<Login> callback
@@ -256,13 +255,13 @@ public interface DrupalService {
      * Example: &access_token or with cookie/session header
      */
     @POST("/user/profile.json")
-    void userProfile( // TODO getProfile()
+    void getProfile(
         Callback<User> callback
     );
 
     @FormUrlEncoded
     @POST("/user/profile.json")
-    void userProfile(// TODO getProfile()
+    void getProfile(
         @Field("access_token") String accessToken,
         Callback<User> callback
     );
@@ -292,7 +291,7 @@ public interface DrupalService {
      * Expected Response(in JSON): 1
      */
     @POST("/user/logout.json")
-    void userLogout(// TODO logout
+    void logout(
         Callback<Logout> callback
     );
 
@@ -487,9 +486,15 @@ public interface DrupalService {
 
     @FormUrlEncoded
     @POST("/token.json")
-    void token(
+    void getToken(
         @Field("username") String username,
         @Field("password") String password,
+        Callback<Login> callback
+    );
+
+    @FormUrlEncoded
+    @POST("/token.json")
+    void getToken(
         Callback<Login> callback
     );
 }
