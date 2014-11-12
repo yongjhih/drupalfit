@@ -485,14 +485,14 @@ public interface DrupalService {
     );
 
     @FormUrlEncoded
-    @POST("/token.json")
+    @POST("/user/token.json")
     void getToken(
         @Field("username") String username,
         @Field("password") String password,
         Callback<Login> callback
     );
 
-    @POST("/token.json")
+    @POST("/user/token.json")
     void getToken(
         Callback<Login> callback
     );
