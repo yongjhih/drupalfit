@@ -187,9 +187,9 @@ public interface DrupalService {
         }
 
       //"access": "1414653769",
-        public String access;
+        public String access; // TODO Date
       //"created": "1414155320",
-        public String created;
+        public String created; // TODO Date
       //"signature_format": null,
       //"signature": "",
       //"theme": "",
@@ -428,8 +428,8 @@ public interface DrupalService {
         public int uid;
         public String title;
         public String type;
-        public long created; // TODO Date
-        public long changed; // TODO Date
+        public String created; // TODO Date
+        public String changed; // TODO Date
 
         @Override
         public String toString() {

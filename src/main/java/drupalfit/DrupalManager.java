@@ -246,8 +246,14 @@ public class DrupalManager implements DrupalService {
         String accessToken,
         final Callback<User> callback
     ) {
-        setAccessToken(accessToken);
-        getService().getProfile(accessToken, callback);
+        if (!TextUtils.isEmpty(this.accessToken) && !this.accessToken.equals(accessToken)) {
+            setAccessToken(accessToken);
+            Log8.d(accessToken);
+            getService().getProfile(callback);
+        } else {
+            Log8.d(accessToken);
+            getService().getProfile(accessToken, callback);
+        }
     }
 
     @Override
@@ -351,6 +357,7 @@ public class DrupalManager implements DrupalService {
 
     public DrupalManager setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+        Log8.d(accessToken);
 
         if (mRequestInterceptor != null) {
             mRequestInterceptor.accessToken = accessToken;
@@ -424,13 +431,15 @@ public class DrupalManager implements DrupalService {
         @Override
         public void intercept(RequestFacade request) {
             if (!TextUtils.isEmpty(cookie)) {
+                Log8.d(cookie);
                 request.addHeader("Cookie", cookie);
             }
             if (!TextUtils.isEmpty(xcsrfToken)) {
+                Log8.d(xcsrfToken);
                 request.addHeader("X-CSRF-Token", xcsrfToken);
             }
             if (!TextUtils.isEmpty(accessToken)) {
-                Log8.d();
+                Log8.d(accessToken);
                 //request.addQueryParam("access_token", accessToken);
                 request.addEncodedQueryParam("access_token", accessToken);
             }
