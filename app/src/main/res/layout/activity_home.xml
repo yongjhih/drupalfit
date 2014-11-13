@@ -36,6 +36,10 @@
         android:background="@color/windowBackgroundColor"
         >
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -219,7 +223,65 @@
                 android:paddingBottom="15dp"
                 android:gravity="center"
                 />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:background="#8fff"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_nid"
+                android:textColor="#d111"
+                android:textColorHint="#dbbb"
+                android:background="#dfff"
+                android:hint="Comment for Node id"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment_content"
+                android:textColor="#d111"
+                android:textColorHint="#dbbb"
+                android:background="#dfff"
+                android:hint="Comment content"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#8fff"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/comment"
+                android:textColor="#d111"
+                android:textColorHint="#dbbb"
+                android:background="#dfff"
+                android:text="Comment"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:gravity="center"
+                />
         </LinearLayout>
+        </ScrollView>
 
         <ListView
             android:layout_width="260dp"

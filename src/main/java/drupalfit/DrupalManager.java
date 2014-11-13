@@ -588,8 +588,8 @@ public class DrupalManager implements DrupalService {
     ) {
         int i;
         try {
-            i = Integer.valueOf(nid);
-        } catch (Exception e) {
+            i = Integer.parseInt(nid);
+        } catch (NumberFormatException e) {
             callback.failure(RetrofitError.unexpectedError("failure", e));
             return;
         }
@@ -662,6 +662,47 @@ public class DrupalManager implements DrupalService {
         Callback<Comment> callback
     ) {
         getService().addComment(comment, nid, callback);
+    }
+
+    public void addComment(
+        String comment,
+        String nid,
+        Callback<Comment> callback
+    ) {
+        int i;
+        try {
+            i = Integer.parseInt(nid);
+        } catch (NumberFormatException e) {
+            callback.failure(RetrofitError.unexpectedError("failure", e));
+            return;
+        }
+        addComment(comment, i, callback);
+    }
+
+    @Override
+    public void addComment(
+        String subject,
+        String comment,
+        int nid,
+        Callback<Comment> callback
+    ) {
+        getService().addComment(subject, comment, nid, callback);
+    }
+
+    public void addComment(
+        String subject,
+        String comment,
+        String nid,
+        Callback<Comment> callback
+    ) {
+        int i;
+        try {
+            i = Integer.parseInt(nid);
+        } catch (NumberFormatException e) {
+            callback.failure(RetrofitError.unexpectedError("failure", e));
+            return;
+        }
+        getService().addComment(subject, comment, i, callback);
     }
 
     @Override

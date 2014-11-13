@@ -73,6 +73,45 @@ public class HomeActivity extends ToolBarActivity {
     View view;
     @InjectView(R.id.nid)
     EditText nid;
+    @InjectView(R.id.comment_nid)
+    EditText commentNid;
+    @InjectView(R.id.comment_content)
+    EditText commentContent;
+
+    @OnClick(R.id.comment)
+    public void comment() {
+        String commentNid = this.commentNid.getText().toString();
+        String commentContent = this.commentContent.getText().toString();
+
+        if (TextUtils.isEmpty(commentNid)) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (TextUtils.isEmpty(commentContent)) {
+            Toast.makeText(HomeActivity.this, "failure", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        progress();
+
+        DrupalManager.get()
+            .setEndpoint(endpoint.getText().toString())
+            .build();
+
+        DrupalManager.get().addComment(commentContent, commentNid, new Callback<Comment>() {
+            @Override
+            public void success(Comment comment, Response response) {
+                done();
+                Toast.makeText(HomeActivity.this, "success", Toast.LENGTH_LONG).show();
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                done();
+                Toast.makeText(HomeActivity.this, "failure: " + error, Toast.LENGTH_LONG).show();
+                Log8.d(error);
+            }
+        });
+    }
 
     private void hideSoftInputFromWindow() {
         InputMethodManager imm = (InputMethodManager) getSystemService(

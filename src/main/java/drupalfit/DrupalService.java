@@ -551,12 +551,25 @@ public interface DrupalService {
      * Example URL : http://drupal6-services/services/plist/comment
      * Example:&comment[body]=commentbody&comment[nid]=49
      * Expected Response(in JSON): {"cid":"31","uri":"http:\/\/drupal6-services\/services\/plist\/comment\/31"}
+     * curl -k -c cookie.txt -b cookie.txt -X POST 'https://example.com/api/comment.json' -H 'X-CSRF-Token: JAndrohmVrkBkRq7PoGwSsI6MoPGQz0VixZgyKC7XaQ' -d 'nid=2&comment[subject]=yo&comment_body[und][0][value]=yoo'
+     *
+     * ref: tests/functional/ServicesResourceCommentTests.test
+     *
      */
     @FormUrlEncoded
     @POST("/comment.json")
     void addComment(
-        @Field("comment[body]") String comment,
-        @Field("comment[nid]") int nid,
+        @Field("subject") String subject,
+        @Field("comment_body[und][0][value]") String comment,
+        @Field("nid") int nid,
+        Callback<Comment> callback
+    );
+
+    @FormUrlEncoded
+    @POST("/comment.json")
+    void addComment(
+        @Field("comment_body[und][0][value]") String comment,
+        @Field("nid") int nid,
         Callback<Comment> callback
     );
 
