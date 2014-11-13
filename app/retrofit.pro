@@ -1,6 +1,5 @@
 -keepattributes *Annotation*,Signature
 
--dontwarn rx.**
 -dontwarn retrofit.**
 
 -keep class retrofit.** { *; }

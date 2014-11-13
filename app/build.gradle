@@ -21,6 +21,7 @@ dependencies {
     compile 'com.jakewharton:butterknife:5.1.+'
     compile 'com.github.johnpersano:supertoasts:1.3.4@aar'
     //compile 'com.android.support:multidex:1.0.+'
+    compile 'com.netflix.rxjava:rxjava-android:0.20.+'
 }
 
 android {
@@ -50,6 +51,7 @@ android {
             proguardFiles 'okhttp.pro'
             proguardFiles 'jackson.pro'
             proguardFiles 'butterknife.pro'
+            proguardFiles 'rx.pro'
             proguardFiles 'retrolambda.pro'
             // https://github.com/facebook/proguard/blob/master/examples/annotations/lib/annotations.pro
             proguardFiles 'proguard-annotations.pro'
