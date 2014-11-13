@@ -9,6 +9,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Client;
 import retrofit.client.OkClient;
 import retrofit.client.Response;
+import retrofit.client.Header;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -211,13 +212,36 @@ public class DrupalManager implements DrupalService {
         String username,
         String email,
         String password,
-        Callback<User> callback) {
-        /*
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        */
-        getService().register(username, email, password, callback);
+        final Callback<User> callback) {
+        getService().register(username, email, password, new Callback<User>() {
+            @Override
+            public void success(final User user, final Response response) {
+                for (Header header : response.getHeaders()) {
+                    if ("Set-Cookie".equalsIgnoreCase(header.getName())) {
+                        setCookie(header.getValue());
+                        break;
+                    }
+                }
+                getToken(new Callback<Login>() { // Fetch a new xcsrfToken
+                    @Override
+                    public void success(Login l, Response r) {
+                        Log8.d(l.token);
+                        setXcsrfToken(l.token);
+                        callback.success(user, response);
+                    }
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log8.d("Auto-fetch new xcsrfToken failure");
+                        //callback.failure(error);
+                    }
+                });
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                Log8.d();
+                callback.failure(error);
+            }
+        });
     }
 
     public void register(
@@ -232,13 +256,40 @@ public class DrupalManager implements DrupalService {
     public void login(
         String username,
         String password,
-        Callback<Login> callback
+        final Callback<Login> callback
     ) {
-        /*
-        this.username = username;
-        this.password = password;
-        */
-        getService().login(username, password, callback);
+        getService().login(username, password, new Callback<Login>() {
+            @Override
+            public void success(final Login login, final Response response) {
+                Log8.d(login.token);
+                //setXcsrfToken(login.token); // Need fetch a new xcsrfToken or not?
+                //callback.success(login, response);
+                for (Header header : response.getHeaders()) {
+                    if ("Set-Cookie".equalsIgnoreCase(header.getName())) {
+                        setCookie(header.getValue());
+                        break;
+                    }
+                }
+                getToken(new Callback<Login>() { // Fetch a new xcsrfToken
+                    @Override
+                    public void success(Login l, Response r) {
+                        Log8.d(l.token);
+                        setXcsrfToken(l.token);
+                        callback.success(login, response);
+                    }
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log8.d("Auto-fetch new xcsrfToken failure");
+                        //callback.failure(error);
+                    }
+                });
+            }
+            @Override
+            public void failure(RetrofitError error) {
+                Log8.d();
+                callback.failure(error);
+            }
+        });
     }
 
     @Override
