@@ -15,9 +15,11 @@ public final class Log8 {
     public static boolean printStackStrace = false;
 
     /**
+     * <pre>
      * Log8.v("test");
      * Log8.v("a=", a, "b=", b);
      * Log8.v("This is an array:", array);
+     * </pre>
      */
     public static String getMsg(Object... arr) {
         StackTraceElement call = Thread.currentThread().getStackTrace()[4];

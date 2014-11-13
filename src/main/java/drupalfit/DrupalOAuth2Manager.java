@@ -39,6 +39,10 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.content.Context;
 
+/**
+ * OAuth of authentication.
+ *
+ */
 public class DrupalOAuth2Manager {
     protected String endpoint;
     protected String clientId;
@@ -50,10 +54,14 @@ public class DrupalOAuth2Manager {
     protected String username;
     protected String password;
 
-    // TODO merge into DrupalManager about hybridauth
-    /**
-     * hybridauth_ulogin/hybridauth_ulogin.admin.inc
+    /*
+     * <p>
+     * TODO merge into DrupalManager about hybridauth
+     * </p>
      *
+     * @see hybridauth_ulogin/hybridauth_ulogin.admin.inc.
+     *
+     * <pre>
      * "vkontakte" => "Vkontakte",
      * "odnoklassniki" => "Odnoklassniki",
      * "mailru" => "Mailru",
@@ -72,9 +80,11 @@ public class DrupalOAuth2Manager {
      * "vimeo" => "",
      * "youtube" => "",
      * "webmoney" => "",
+     * </pre>
      *
-     * additional-providers/hybridauth-/Providers/
+     * @see additional-providers/hybridauth-/Providers/
      *
+     * <pre>
      * px500
      * Deezer
      * Disqus
@@ -109,7 +119,9 @@ public class DrupalOAuth2Manager {
      * Yahoo
      * Yammer
      * Yandex
+     * </pre>
      */
+
     public static final String DEEZER        = "Deezer";
     public static final String DISQUS        = "Disqus";
     public static final String DRAUGIEM      = "Draugiem";
@@ -410,9 +422,9 @@ public class DrupalOAuth2Manager {
     }
 
     /**
-     * https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999
-     *
      * Allow sign-up with access_token.
+     *
+     * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-up with access_token</a>
      */
     private void requestHybridauthCookie(Context context, String provider, String token, Callback<String> callback) {
         if (context == null) return;
@@ -487,6 +499,9 @@ public class DrupalOAuth2Manager {
         }
     }
 
+    /**
+     * A simple {@link RequestInterceptor} for each request of interception
+     */
     class SimpleRequestInterceptor implements RequestInterceptor {
         public String cookie;
 
@@ -500,6 +515,9 @@ public class DrupalOAuth2Manager {
 
     protected SimpleRequestInterceptor mRequestInterceptor;
 
+    /**
+     * A simple {@link retrofit.ErrorHandler}
+     */
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ErrorHandler implements retrofit.ErrorHandler {
         public ErrorHandler() {}
@@ -511,8 +529,14 @@ public class DrupalOAuth2Manager {
         }
     }
 
+    /**
+     * A all trust SSLSocketFactory
+     */
     private static SSLSocketFactory sTrustedFactory;
 
+    /**
+     * A getter of all trust SSLSocketFactory
+     */
     public static SSLSocketFactory getTrustedFactory() {
         if (sTrustedFactory == null) {
             final TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
@@ -543,12 +567,17 @@ public class DrupalOAuth2Manager {
         return sTrustedFactory;
     }
 
+    /**
+     * A all trust host name verifier.
+     */
     private static HostnameVerifier sTrustedVerifier;
 
+    /**
+     * A getter of all trust host name verifier
+     */
     public static HostnameVerifier getTrustedVerifier() {
         if (sTrustedVerifier == null) {
             sTrustedVerifier = new HostnameVerifier() {
-
                 public boolean verify(String hostname, SSLSession session) {
                     return true;
                 }

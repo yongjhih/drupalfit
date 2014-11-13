@@ -51,7 +51,8 @@ public class DrupalManager implements DrupalService {
     private String email; // TODO
     private String password; // TODO
 
-    /**
+    /*
+     * <pre>
      * hybridauth_ulogin/hybridauth_ulogin.admin.inc
      *
      * "vkontakte" => "Vkontakte",
@@ -109,7 +110,9 @@ public class DrupalManager implements DrupalService {
      * Yahoo
      * Yammer
      * Yandex
+     * </pre>
      */
+
     public static final String DEEZER        = "Deezer";
     public static final String DISQUS        = "Disqus";
     public static final String DRAUGIEM      = "Draugiem";
@@ -461,9 +464,9 @@ public class DrupalManager implements DrupalService {
     }
 
     /**
-     * https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999
-     *
      * Allow sign-up with access_token.
+     *
+     * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-up with access_token</a>
      */
     private void getCookie(Context context, String provider, String token, Callback<String> callback) {
         if (context == null) return;

@@ -31,7 +31,9 @@ import rx.functions.Func1;
  */
 public interface DrupalOAuth2 {
     /**
+     * <pre>
      * curl -L -I -k -b b.cookie -X GET 'https://example.com/oauth2/authorize?client_id=id&client_secret=secret&response_type=code&state=state'
+     * </pre>
      */
     @GET("/authorize")
     void authorize(
@@ -51,7 +53,9 @@ public interface DrupalOAuth2 {
     );
 
     /**
+     * <pre>
      * curl -k -X POST 'https://example.com/oauth2/token' -d 'code=aa5b25e58cb0ecbb1ddf5d671e769b04cabcdefg&state=8tory&grant_type=authorization_code&client_id=id&client_secret=secret'
+     * </pre>
      */
     @Multipart
     @POST("/token")
@@ -86,7 +90,9 @@ public interface DrupalOAuth2 {
 
 
     /**
+     * <pre>
      * curl -k -X POST 'https://example.com/oauth2/token' -d 'grant_type=password&client_id=id&client_secret=secret&state=state&username=foo&password=bar'
+     * </pre>
      */
     @Multipart
     @POST("/token")

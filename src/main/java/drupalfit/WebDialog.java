@@ -44,6 +44,9 @@ import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.RetrofitError;
 
+/**
+ * A webdialog for external web and redirect url callback
+ */
 public class WebDialog extends Dialog {
     public static final int DEFAULT_THEME = android.R.style.Theme_Translucent_NoTitleBar;
     private String url;
@@ -152,7 +155,7 @@ public class WebDialog extends Dialog {
         spinner.setOnCancelListener(new OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
-        Log8.d();
+                Log8.d();
                 WebDialog.this.dismiss();
             }
         });

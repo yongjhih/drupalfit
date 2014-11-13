@@ -27,7 +27,7 @@ import proguard.annotation.KeepClassMembers;
 /**
  * DrupalService.
  *
- * https://gist.github.com/kylebrowning/affc9864487bb1b9c918
+ * <pre>
  * Node Resource
  * Retrieve
  *
@@ -127,9 +127,16 @@ import proguard.annotation.KeepClassMembers;
  * Example URL : http://drupal6-services/services/plist/user/logout
  * Example:
  * Expected Response(in JSON): 1
+ * </pre>
+ *
+ * @see <a href="https://gist.github.com/kylebrowning/affc9864487bb1b9c918">drupal_services_api.md</a>
+ *
  */
 public interface DrupalService {
     /**
+     * Register.
+     *
+     * <pre>
      * Args: account*
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/user
@@ -161,6 +168,7 @@ public interface DrupalService {
      *   "timezone": "-25200",
      *   "language": ""
      * }
+     * </pre>
      */
     @FormUrlEncoded
     @POST("/user/register.json")
@@ -171,16 +179,6 @@ public interface DrupalService {
         Callback<User> callback
     );
 
-    /*
-    @FormUrlEncoded
-    @POST("/user/register")
-    void register(
-        @Field("mail") String email,
-        @Field("pass") String password,
-        Callback<User> callback
-    );
-    */
-
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -188,25 +186,25 @@ public interface DrupalService {
         public User() {
         }
 
-      //"access": "1414653769",
+        //"access": "1414653769",
         public String access; // TODO Date
-      //"created": "1414155320",
+        //"created": "1414155320",
         public String created; // TODO Date
-      //"signature_format": null,
-      //"signature": "",
-      //"theme": "",
-      //"mail": "foo@bar.com",
+        //"signature_format": null,
+        //"signature": "",
+        //"theme": "",
+        //"mail": "foo@bar.com",
         public String mail;
-      //"name": "foo",
+        //"name": "foo",
         public String name;
-      //"uid": "1234",
+        //"uid": "1234",
         public String uid;
-      //"login": "1414652619",
+        //"login": "1414652619",
         public String login;
-      //"status": "1",
-      //"timezone": "Asia/Taipei",
-      //"language": "en_GB",
-      //"picture": {
+        //"status": "1",
+        //"timezone": "Asia/Taipei",
+        //"language": "en_GB",
+        //"picture": {
         //"url": "https://bar.com/sites/default/files/pictures/picture-24824-1414155320.jpg",
         //"rdf_mapping": [],
         //"fid": "24340",
@@ -217,26 +215,28 @@ public interface DrupalService {
         //"filesize": "9422",
         //"status": "1",
         //"timestamp": "1414155320"
-      //},
-      //"init": "foo@bar.com",
+        //},
+        //"init": "foo@bar.com",
         public String init;
-      //"data": {
+        //"data": {
         //"mimemail_textonly": 0,
         //"l10n_client_disabled": false,
         //"contact": 1
-      //},
-      //"roles": {
+        //},
+        //"roles": {
         //"2": "authenticated user"
-      //}
+        //}
     }
 
     /**
      * userLogin.
      *
+     * <pre>
      * Args:
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/user/login
      * Example: &name=admin&pass=pass
+     * </pre>
      */
     @FormUrlEncoded
     @POST("/user/login.json")
@@ -249,12 +249,16 @@ public interface DrupalService {
     /**
      * userProfile.
      *
+     * <p>
      * resource provided by oauth2_login_provider module.
+     * </p>
      *
+     * <pre>
      * Args:
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/user/login
      * Example: &access_token or with cookie/session header
+     * </pre>
      */
     @POST("/user/profile.json")
     void getProfile(
@@ -275,22 +279,41 @@ public interface DrupalService {
         public Login() {
         }
 
+        /**
+         * {@link User}
+         */
         public User user;
-        //"session_name": "SESS8b1f176c338bbcc3922a56004cec1234",
+
+        /**
+         * <pre>
+         * "session_name": "SESS8b1f176c338bbcc3922a56004cec1234",
+         * </pre>
+         */
         public String session_name;
-        //"sessid": "853c6c7f6eaa051724080dff202e1234"
+
+        /**
+         * <pre>
+         * "sessid": "853c6c7f6eaa051724080dff202e1234"
+         * </pre>
+         */
         public String sessid;
-        public String token; // X-CSRF-Token ?
+
+        /**
+         * X-CSRF-Token.
+         */
+        public String token;
     }
 
     /**
      * userLogout.
      *
+     * <pre>
      * Args:
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/user/logout
      * Example:
      * Expected Response(in JSON): 1
+     * </pre>
      */
     @POST("/user/logout.json")
     void logout(
@@ -319,105 +342,16 @@ public interface DrupalService {
     );
 
 /*
-{
-  "path": "https://example.com/content/test",
-  "data": "a:2:{s:20:\"l10n_client_disabled\";b:0;s:7:\"overlay\";i:1;}",
-  "picture": "0",
-  "name": "foo",
-  "comment_count": "0",
-  "last_comment_uid": "1",
-  "last_comment_name": null,
-  "last_comment_timestamp": "1389341070",
-  "cid": "0",
-  "rdf_mapping": {
-    "last_activity": {
-      "callback": "date_iso8601",
-      "datatype": "xsd:dateTime",
-      "predicates": [
-        "sioc:last_activity_date"
-      ]
-    },
-    "rdftype": [
-      "foaf:Document"
-    ],
-    "title": {
-      "predicates": [
-        "dc:title"
-      ]
-    },
-    "created": {
-      "callback": "date_iso8601",
-      "datatype": "xsd:dateTime",
-      "predicates": [
-        "dc:date",
-        "dc:created"
-      ]
-    },
-    "changed": {
-      "callback": "date_iso8601",
-      "datatype": "xsd:dateTime",
-      "predicates": [
-        "dc:modified"
-      ]
-    },
-    "body": {
-      "predicates": [
-        "content:encoded"
-      ]
-    },
-    "uid": {
-      "type": "rel",
-      "predicates": [
-        "sioc:has_creator"
-      ]
-    },
-    "name": {
-      "predicates": [
-        "foaf:name"
-      ]
-    },
-    "comment_count": {
-      "datatype": "xsd:integer",
-      "predicates": [
-        "sioc:num_replies"
-      ]
-    }
-  },
-  "body": {
-    "und": [
-      {
-        "safe_summary": "",
-        "safe_value": "<p>test</p>\n",
-        "format": "filtered_html",
-        "summary": "",
-        "value": "test"
-      }
-    ]
-  },
-  "revision_uid": "1",
-  "sticky": "0",
-  "promote": "0",
-  "comment": "1",
-  "status": "1",
-  "log": "",
-  "title": "test",
-  "uid": "1",
-  "vid": "1",
-  "nid": "1",
-  "type": "page",
-  "language": "und",
-  "created": "1389341070",
-  "changed": "1389341070",
-  "tnid": "0",
-  "translate": "0",
-  "revision_timestamp": "1389341070"
-}
 */
     /**
+     * Node.
+     *
+     * <pre>
      * Args:
      * HTTP Method : GET
      * Example URL : http://drupal6-services/services/plist/node/1
      * Expected Response(in JSON): {"nid":"1","type":"story","language":"","uid":"0","status":"0","created":"1286592762","changed":"1286592762","comment":"2","promote":"0","moderate":"0","sticky":"0","tined":"0","translate":"0","vid":"1","revision_uid":"1","title":"test","body":"test","teaser":"test","log":"","revision_timestamp":"1286592762","format":"1","name":"","picture":"","data":null,"last_comment_timestamp":"1286592762","last_comment_name":null,"comment_count":"0","taxonomy":[],"files":[],"uric":"http:\/\/drupal6-services\/services\/plist\/node\/1"}
+     * </pre>
      */
     @Keep
     @KeepClassMembers
@@ -500,10 +434,14 @@ public interface DrupalService {
     );
 
     /**
+     * Get comment.
+     *
+     * <pre>
      * Example URL : http://drupal6-services/services/plist/comment/30
      * Expected Response(in JSON): {"cid":"30","pid":"0","nid":"48","uid":"1","subject":"asdfadf","comment":"dfgsdfgsdg","hostname":"127.0.0.1","timestamp":"1294792128","status":"0","format":"1","thread":"01\/","name":"admin","mail":"","homepage":""}
      *
      * curl -k -c cookie -b cookie -X GET 'https://example.com/api/comment/1.json' -H 'X-CSRF-Token: JAndrohmVrkBkRq7PoGwSsI6MoPGQz0VixZgyKC7XaQ'
+     * </pre>
      */
     @GET("/comment/{cid}.json")
     void getComment(
@@ -546,17 +484,19 @@ public interface DrupalService {
     }
 
     /**
-     * Create
+     * Create comment.
      *
+     * <pre>
      * Args: comment*
      * HTTP Method: POST
      * Example URL : http://drupal6-services/services/plist/comment
      * Example:&comment[body]=commentbody&comment[nid]=49
      * Expected Response(in JSON): {"cid":"31","uri":"http:\/\/drupal6-services\/services\/plist\/comment\/31"}
+     *
      * curl -k -c cookie.txt -b cookie.txt -X POST 'https://example.com/api/comment.json' -H 'X-CSRF-Token: JAndrohmVrkBkRq7PoGwSsI6MoPGQz0VixZgyKC7XaQ' -d 'nid=2&subject=yo&comment_body[und][0][value]=yoo'
+     * </pre>
      *
-     * ref: tests/functional/ServicesResourceCommentTests.test
-     *
+     * @see tests/functional/ServicesResourceCommentTests.test
      */
     @FormUrlEncoded
     @POST("/comment.json")
@@ -576,14 +516,111 @@ public interface DrupalService {
     );
 
     /**
-     * Update
+     * Update comment.
      *
-     *
+     * <pre>
      * Args: data*
      * HTTP Method: PUT
      * Example URL : http://drupal6-services/services/plist/comment/30
      * Example: &data[body]=commentbody&data[nid]=49
      * Expected Response(in JSON): "30"
+     * </pre>
+     *
+     * <pre>
+     * {
+     *   "path": "https://example.com/content/test",
+     *   "data": "a:2:{s:20:\"l10n_client_disabled\";b:0;s:7:\"overlay\";i:1;}",
+     *   "picture": "0",
+     *   "name": "foo",
+     *   "comment_count": "0",
+     *   "last_comment_uid": "1",
+     *   "last_comment_name": null,
+     *   "last_comment_timestamp": "1389341070",
+     *   "cid": "0",
+     *   "rdf_mapping": {
+     *     "last_activity": {
+     *       "callback": "date_iso8601",
+     *       "datatype": "xsd:dateTime",
+     *       "predicates": [
+     *         "sioc:last_activity_date"
+     *       ]
+     *     },
+     *     "rdftype": [
+     *       "foaf:Document"
+     *     ],
+     *     "title": {
+     *       "predicates": [
+     *         "dc:title"
+     *       ]
+     *     },
+     *     "created": {
+     *       "callback": "date_iso8601",
+     *       "datatype": "xsd:dateTime",
+     *       "predicates": [
+     *         "dc:date",
+     *         "dc:created"
+     *       ]
+     *     },
+     *     "changed": {
+     *       "callback": "date_iso8601",
+     *       "datatype": "xsd:dateTime",
+     *       "predicates": [
+     *         "dc:modified"
+     *       ]
+     *     },
+     *     "body": {
+     *       "predicates": [
+     *         "content:encoded"
+     *       ]
+     *     },
+     *     "uid": {
+     *       "type": "rel",
+     *       "predicates": [
+     *         "sioc:has_creator"
+     *       ]
+     *     },
+     *     "name": {
+     *       "predicates": [
+     *         "foaf:name"
+     *       ]
+     *     },
+     *     "comment_count": {
+     *       "datatype": "xsd:integer",
+     *       "predicates": [
+     *         "sioc:num_replies"
+     *       ]
+     *     }
+     *   },
+     *   "body": {
+     *     "und": [
+     *       {
+     *         "safe_summary": "",
+     *         "safe_value": "<p>test</p>\n",
+     *         "format": "filtered_html",
+     *         "summary": "",
+     *         "value": "test"
+     *       }
+     *     ]
+     *   },
+     *   "revision_uid": "1",
+     *   "sticky": "0",
+     *   "promote": "0",
+     *   "comment": "1",
+     *   "status": "1",
+     *   "log": "",
+     *   "title": "test",
+     *   "uid": "1",
+     *   "vid": "1",
+     *   "nid": "1",
+     *   "type": "page",
+     *   "language": "und",
+     *   "created": "1389341070",
+     *   "changed": "1389341070",
+     *   "tnid": "0",
+     *   "translate": "0",
+     *   "revision_timestamp": "1389341070"
+     * }
+     * </pre>
      */
     @FormUrlEncoded
     @PUT("/comment/{cid}.json")
@@ -595,14 +632,15 @@ public interface DrupalService {
     );
 
     /**
-     * Delete
+     * Delete comment.
      *
-     * Args:
+     * <pre>
+     * Args: n/a
      * HTTP Method: DELETE
      * Example URL : http://drupal6-services/services/plist/comment/30
      * Example:
      * Expected Response(in JSON): 1
-     * User Resource
+     * </pre>
      */
     @DELETE("/comment/{cid}.json")
     void deleteComment(
