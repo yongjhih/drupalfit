@@ -40,6 +40,9 @@ import drupalfit.DrupalOAuth2.Credential;
 import android.net.Uri;
 import android.content.Context;
 
+import rx.Observable;
+import rx.functions.Func1;
+
 public class DrupalManager implements DrupalService {
     private static DrupalManager sInstance = new DrupalManager();
     private DrupalService mService;
@@ -724,5 +727,18 @@ public class DrupalManager implements DrupalService {
         Callback<Comment> callback
     ) {
         getService().deleteComment(cid, callback);
+    }
+
+    @Override
+    public Observable<Login> observeLogin(
+        String username,
+        String password
+    ) {
+        return getService().observeLogin(username, password);
+    }
+
+    @Override
+    public Observable<Login> observeToken() {
+        return getService().observeToken();
     }
 }

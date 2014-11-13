@@ -60,6 +60,11 @@ import com.github.johnpersano.supertoasts.SuperToast;
 import com.github.johnpersano.supertoasts.SuperActivityToast;
 import android.view.inputmethod.InputMethodManager;
 
+import rx.schedulers.*;
+import rx.android.schedulers.*;
+import rx.functions.*;
+import rx.Observable;
+
 public class HomeActivity extends ToolBarActivity {
     @InjectView(R.id.email)
     EditText email;
@@ -145,6 +150,13 @@ public class HomeActivity extends ToolBarActivity {
         DrupalManager.get()
             .setEndpoint(endpoint.getText().toString())
             .build();
+
+        DrupalManager.get().observeLogin(email.getText().toString(), password.getText().toString())
+            .flatMap(login -> DrupalManager.get().observeToken())
+            .subscribe(login -> {
+                Log8.d(login.token);
+                Toast.makeText(HomeActivity.this, "success: " + "uid:" + login.token, Toast.LENGTH_LONG).show();
+            });
 
         DrupalManager.get().login(email.getText().toString(), password.getText().toString(), new Callback<Login>() {
             @Override

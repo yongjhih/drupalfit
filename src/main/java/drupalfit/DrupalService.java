@@ -24,6 +24,9 @@ import retrofit.mime.TypedFile;
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMembers;
 
+import rx.Observable;
+import rx.functions.Func1;
+
 /**
  * DrupalService.
  *
@@ -246,6 +249,13 @@ public interface DrupalService {
         Callback<Login> callback
     );
 
+    @FormUrlEncoded
+    @POST("/user/login.json")
+    Observable<Login> observeLogin(
+        @Field("username") String username,
+        @Field("password") String password
+    );
+
     /**
      * userProfile.
      *
@@ -432,6 +442,9 @@ public interface DrupalService {
     void getToken(
         Callback<Login> callback
     );
+
+    @POST("/user/token.json")
+    Observable<Login> observeToken();
 
     /**
      * Get comment.
