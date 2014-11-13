@@ -14,6 +14,8 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
+import retrofit.http.PUT;
+import retrofit.http.DELETE;
 import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Streaming;
@@ -495,5 +497,101 @@ public interface DrupalService {
     @POST("/user/token.json")
     void getToken(
         Callback<Login> callback
+    );
+
+    /**
+     * Example URL : http://drupal6-services/services/plist/comment/30
+     * Expected Response(in JSON): {"cid":"30","pid":"0","nid":"48","uid":"1","subject":"asdfadf","comment":"dfgsdfgsdg","hostname":"127.0.0.1","timestamp":"1294792128","status":"0","format":"1","thread":"01\/","name":"admin","mail":"","homepage":""}
+     */
+    @GET("/comment/{cid}.json")
+    void getComment(
+        @Field("cid") int cid,
+        Callback<Comment> callback
+    );
+
+    @Keep
+    @KeepClassMembers
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Comment {
+        public Comment() {
+        }
+
+        public int nid;
+        public int cid;
+        public int uid;
+        public int pid;
+        public String subject;
+        public String comment;
+        public String timestamp; // TODO Date
+        public String name;
+        public String mail;
+        public String uri;
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append("nid: " + nid + ", ");
+            sb.append("cid: " + cid + ", ");
+            sb.append("uid: " + uid + ", ");
+            sb.append("pid: " + pid + ", ");
+            sb.append("subject: " + subject + ", ");
+            sb.append("comment: " + comment + ", ");
+            sb.append("name: " + name + ", ");
+            sb.append("mail: " + mail + ", ");
+            sb.append("timestamp: " + timestamp + ", ");
+            return sb.toString();
+        }
+    }
+
+    /**
+     * Create
+     *
+     * Args: comment*
+     * HTTP Method: POST
+     * Example URL : http://drupal6-services/services/plist/comment
+     * Example:&comment[body]=commentbody&comment[nid]=49
+     * Expected Response(in JSON): {"cid":"31","uri":"http:\/\/drupal6-services\/services\/plist\/comment\/31"}
+     */
+    @FormUrlEncoded
+    @POST("/comment.json")
+    void addComment(
+        @Field("comment[body]") String comment,
+        @Field("comment[nid]") int nid,
+        Callback<Comment> callback
+    );
+
+    /**
+     * Update
+     *
+     *
+     * Args: data*
+     * HTTP Method: PUT
+     * Example URL : http://drupal6-services/services/plist/comment/30
+     * Example: &data[body]=commentbody&data[nid]=49
+     * Expected Response(in JSON): "30"
+     */
+    @FormUrlEncoded
+    @PUT("/comment/{cid}.json")
+    void setComment(
+        @Path("cid") int cid,
+        @Field("data[body]") String comment,
+        @Field("data[nid]") int nid,
+        Callback<Comment> callback // FIXME
+    );
+
+    /**
+     * Delete
+     *
+     * Args:
+     * HTTP Method: DELETE
+     * Example URL : http://drupal6-services/services/plist/comment/30
+     * Example:
+     * Expected Response(in JSON): 1
+     * User Resource
+     */
+    @DELETE("/comment/{cid}.json")
+    void deleteComment(
+        @Path("cid") int cid,
+        Callback<Comment> callback // FIXME
     );
 }

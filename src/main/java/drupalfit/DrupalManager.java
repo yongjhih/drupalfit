@@ -647,4 +647,38 @@ public class DrupalManager implements DrupalService {
         getService().getToken(callback);
     }
 
+    @Override
+    public void getComment(
+        int cid,
+        Callback<Comment> callback
+    ) {
+        getService().getComment(cid, callback);
+    }
+
+    @Override
+    public void addComment(
+        String comment,
+        int nid,
+        Callback<Comment> callback
+    ) {
+        getService().addComment(comment, nid, callback);
+    }
+
+    @Override
+    public void setComment(
+        int cid,
+        String comment,
+        int nid,
+        Callback<Comment> callback
+    ) {
+        getService().setComment(cid, comment, nid, callback);
+    }
+
+    @Override
+    public void deleteComment(
+        int cid,
+        Callback<Comment> callback
+    ) {
+        getService().deleteComment(cid, callback);
+    }
 }
