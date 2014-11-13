@@ -46,7 +46,7 @@ DrupalManager.get().login("foo", "password", new Callback<Login>() {
 });
 ```
 
-* logout (after userLogin)
+* logout (after login)
 
 ```java
 DrupalManager.get().logout(new Callback<Logout>() {
@@ -65,6 +65,35 @@ DrupalManager.get().logout(new Callback<Logout>() {
 DrupalManager.get().getNode(1, new Callback<Node>() {
     @Override
     public void success(Node node, Response response) {
+    }
+    @Override
+    public void failure(RetrofitError error) {
+    }
+});
+```
+
+* addComment
+
+```java
+String commentContent = "Hello";
+int nodeId = 1;
+DrupalManager.get().addComment(commentContent, nodeId, new Callback<Comment>() {
+    @Override
+    public void success(Comment comment, Response response) {
+    }
+    @Override
+    public void failure(RetrofitError error) {
+    }
+});
+```
+
+* getComment
+
+```java
+String commentId = 1;
+DrupalManager.get().addComment(commentId, new Callback<Comment>() {
+    @Override
+    public void success(Comment comment, Response response) {
     }
     @Override
     public void failure(RetrofitError error) {

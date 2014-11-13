@@ -502,6 +502,8 @@ public interface DrupalService {
     /**
      * Example URL : http://drupal6-services/services/plist/comment/30
      * Expected Response(in JSON): {"cid":"30","pid":"0","nid":"48","uid":"1","subject":"asdfadf","comment":"dfgsdfgsdg","hostname":"127.0.0.1","timestamp":"1294792128","status":"0","format":"1","thread":"01\/","name":"admin","mail":"","homepage":""}
+     *
+     * curl -k -c cookie -b cookie -X GET 'https://example.com/api/comment/1.json' -H 'X-CSRF-Token: JAndrohmVrkBkRq7PoGwSsI6MoPGQz0VixZgyKC7XaQ'
      */
     @GET("/comment/{cid}.json")
     void getComment(
@@ -551,7 +553,7 @@ public interface DrupalService {
      * Example URL : http://drupal6-services/services/plist/comment
      * Example:&comment[body]=commentbody&comment[nid]=49
      * Expected Response(in JSON): {"cid":"31","uri":"http:\/\/drupal6-services\/services\/plist\/comment\/31"}
-     * curl -k -c cookie.txt -b cookie.txt -X POST 'https://example.com/api/comment.json' -H 'X-CSRF-Token: JAndrohmVrkBkRq7PoGwSsI6MoPGQz0VixZgyKC7XaQ' -d 'nid=2&comment[subject]=yo&comment_body[und][0][value]=yoo'
+     * curl -k -c cookie.txt -b cookie.txt -X POST 'https://example.com/api/comment.json' -H 'X-CSRF-Token: JAndrohmVrkBkRq7PoGwSsI6MoPGQz0VixZgyKC7XaQ' -d 'nid=2&subject=yo&comment_body[und][0][value]=yoo'
      *
      * ref: tests/functional/ServicesResourceCommentTests.test
      *
