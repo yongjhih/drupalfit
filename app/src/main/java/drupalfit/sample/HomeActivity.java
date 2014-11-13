@@ -204,7 +204,7 @@ public class HomeActivity extends ToolBarActivity {
 
         DrupalManager.get()
             .setEndpoint(restEndpoint)
-            .setProvider(this, DrupalOAuth2Manager.FACEBOOK, token.getText().toString())
+            .setProvider(this, DrupalManager.FACEBOOK, token.getText().toString())
             .build();
 
         DrupalManager.get().getProfile(new Callback<User>() { // direct access profile, DrupalManager will try to connect

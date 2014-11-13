@@ -91,7 +91,7 @@ DrupalManager.get().addComment(commentContent, nodeId, new Callback<Comment>() {
 
 ```java
 String commentId = 1;
-DrupalManager.get().addComment(commentId, new Callback<Comment>() {
+DrupalManager.get().getComment(commentId, new Callback<Comment>() {
     @Override
     public void success(Comment comment, Response response) {
     }
@@ -104,7 +104,9 @@ DrupalManager.get().addComment(commentId, new Callback<Comment>() {
 Bonus
 =====
 
-* getProfile with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth))
+* Sign-in with facebook access token (Depend on [yongjhih/drupal-hybridauth](https://github.com/yongjhih/drupal-hybridauth)) and getProfile with.
+
+It's easy to integrate facebook sdk.
 
 ```java
 DrupalManager.get().setProvider(this, DrupalManager.FACEBOOK, "faceb00k_t0ken");
