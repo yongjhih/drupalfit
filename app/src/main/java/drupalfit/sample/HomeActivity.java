@@ -64,6 +64,7 @@ import rx.schedulers.*;
 import rx.android.schedulers.*;
 import rx.functions.*;
 import rx.Observable;
+import rx.android.observables.*;
 
 public class HomeActivity extends ToolBarActivity {
     @InjectView(R.id.email)
@@ -151,8 +152,10 @@ public class HomeActivity extends ToolBarActivity {
             .setEndpoint(endpoint.getText().toString())
             .build();
 
-        DrupalManager.get().observeLogin(email.getText().toString(), password.getText().toString())
+        AndroidObservable.bindActivity(HomeActivity.this, DrupalManager.get().observeLogin(email.getText().toString(), password.getText().toString()))
             .flatMap(login -> DrupalManager.get().observeToken())
+            .subscribeOn(Schedulers.io())
+            .onErrorResumeNext(Observable.<Login>empty())
             .subscribe(login -> {
                 Log8.d(login.token);
                 Toast.makeText(HomeActivity.this, "success: " + "uid:" + login.token, Toast.LENGTH_LONG).show();
