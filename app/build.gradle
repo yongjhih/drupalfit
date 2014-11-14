@@ -43,10 +43,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(System.getenv("HOME") + "/.android/debug.keystore")
-            storePassword DEBUG_PASSWORD
-            keyAlias "androiddebugkey"
-            keyPassword DEBUG_PASSWORD
+            storeFile file('drupalfit-sample.keystore')
+            storePassword 'drupalfit'
+            keyAlias 'drupalfit-sample'
+            keyPassword 'drupalfit'
         }
     }
 
