@@ -6,13 +6,11 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:0.14.+'
         classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.+'
-        classpath 'me.tatarka:gradle-retrolambda:2.4.+'
     }
 }
 
 apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.library'
-apply plugin: 'retrolambda'
 
 dependencies {
     //compile fileTree(dir: 'src/main/libs', include: '*.jar')
@@ -31,11 +29,6 @@ dependencies {
 android {
     buildToolsVersion "21.1.0"
     compileSdkVersion 21
-
-    compileOptions {
-      sourceCompatibility JavaVersion.VERSION_1_8
-      targetCompatibility JavaVersion.VERSION_1_8
-    }
 
     defaultConfig {
         minSdkVersion 8

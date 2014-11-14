@@ -152,15 +152,6 @@ public class HomeActivity extends ToolBarActivity {
             .setEndpoint(endpoint.getText().toString())
             .build();
 
-        AndroidObservable.bindActivity(HomeActivity.this, DrupalManager.get().observeLogin(email.getText().toString(), password.getText().toString()))
-            .flatMap(login -> DrupalManager.get().observeToken())
-            .subscribeOn(Schedulers.io())
-            .onErrorResumeNext(Observable.<Login>empty())
-            .subscribe(login -> {
-                Log8.d(login.token);
-                Toast.makeText(HomeActivity.this, "success: " + "uid:" + login.token, Toast.LENGTH_LONG).show();
-            });
-
         DrupalManager.get().login(email.getText().toString(), password.getText().toString(), new Callback<Login>() {
             @Override
             public void success(Login login, Response response) {
