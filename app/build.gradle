@@ -41,6 +41,15 @@ android {
         //multiDexEnabled true
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("HOME") + "/.android/debug.keystore")
+            storePassword DEBUG_PASSWORD
+            keyAlias "androiddebugkey"
+            keyPassword DEBUG_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled true
@@ -55,6 +64,7 @@ android {
             proguardFiles 'retrolambda.pro'
             // https://github.com/facebook/proguard/blob/master/examples/annotations/lib/annotations.pro
             proguardFiles 'proguard-annotations.pro'
+            signingConfig signingConfigs.release
         }
     }
 
