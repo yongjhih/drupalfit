@@ -64,6 +64,7 @@ android {
             proguardFiles 'retrolambda.pro'
             // https://github.com/facebook/proguard/blob/master/examples/annotations/lib/annotations.pro
             proguardFiles 'proguard-annotations.pro'
+            proguardFiles 'proguard-annotations2.pro'
             signingConfig signingConfigs.release
         }
     }
