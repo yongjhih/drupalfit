@@ -34,7 +34,7 @@ android {
         minSdkVersion 8
         targetSdkVersion 21
         versionCode = Integer.parseInt(VERSION_CODE)
-        versionName = VERSION_CODE
+        versionName = VERSION_NAME
     }
 
     lintOptions {
