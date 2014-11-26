@@ -219,6 +219,9 @@ public class DrupalManager implements DrupalService {
         String email,
         String password,
         final Callback<User> callback) {
+        setUsername(username);
+        setEmail(email);
+        setPassword(password);
         getService().register(username, email, password, new Callback<User>() {
             @Override
             public void success(final User user, final Response response) {
@@ -264,6 +267,8 @@ public class DrupalManager implements DrupalService {
         String password,
         final Callback<Login> callback
     ) {
+        setUsername(username);
+        setPassword(password);
         getService().login(username, password, new Callback<Login>() {
             @Override
             public void success(final Login login, final Response response) {
@@ -306,10 +311,17 @@ public class DrupalManager implements DrupalService {
         if (!TextUtils.isEmpty(this.accessToken) && !this.accessToken.equals(accessToken)) {
             setAccessToken(accessToken);
             Log8.d(accessToken);
-            getService().getProfile(callback);
-        } else {
-            Log8.d(accessToken);
-            getService().getProfile(accessToken, callback);
+        }
+
+        getService().getProfile(accessToken, callback);
+    }
+
+    private void syncOAuth() {
+        if (oauth != null) {
+            oauth.setUsername(username);
+            //oauth.setEmail(email);
+            oauth.setPassword(password);
+            oauth.setCookie(cookie);
         }
     }
 
@@ -319,7 +331,7 @@ public class DrupalManager implements DrupalService {
     ) {
         if (cookie == null && accessToken == null) {
             if (oauth != null) {
-                Log8.d();
+                syncOAuth();
                 oauth.getAccessToken(new Callback<Credential>() {
                     @Override
                     public void success(Credential credential, Response response) {
@@ -385,12 +397,14 @@ public class DrupalManager implements DrupalService {
         return get().getService(null);
     }
 
-    public String getAccessToken() {
+    /* DONT USE on main thread */
+    public String getAccessTokenWithNetwork() {
         if (!TextUtils.isEmpty(accessToken)) {
             return accessToken;
         }
 
         if (oauth != null) {
+            syncOAuth();
             Credential c = oauth.getAccessToken();
             if (c != null) {
                 setAccessToken(c.access_token);
@@ -400,16 +414,65 @@ public class DrupalManager implements DrupalService {
         return accessToken;
     }
 
-    public String getAccessToken(String username, String password) {
-        return getAccessToken(username, password, null);
+    public String getAccessToken() {
+        if (!TextUtils.isEmpty(accessToken)) {
+            return accessToken;
+        }
+
+        return accessToken;
     }
 
+    /* DONT USE on main thread */
+    public String getAccessToken(String username, String password) {
+        return getAccessToken(username, password, (String) null);
+    }
+
+    /* DONT USE on main thread */
     public String getAccessToken(String username, String password, String authTokenType) {
+        syncOAuth();
         Credential c = oauth.getAccessToken(username, password);
         if (c != null) {
             setAccessToken(c.access_token);
         }
         return accessToken;
+    }
+
+    public void getAccessToken(final Callback<Credential> callback) {
+        if (oauth != null) {
+            syncOAuth();
+            oauth.getAccessToken(new Callback<Credential>() {
+                @Override
+                public void success(Credential credential, Response response) {
+                    setAccessToken(credential.access_token);
+                    callback.success(credential, response);
+                }
+                @Override
+                public void failure(RetrofitError error) {
+                    callback.failure(error);
+                }
+            });
+        }
+    }
+
+    public void getAccessToken(String username, String password, final Callback<Credential> callback) {
+        getAccessToken(username, password, (String) null, callback);
+    }
+
+    public void getAccessToken(String username, String password, String authTokenType, final Callback<Credential> callback) {
+        if (oauth != null) {
+            syncOAuth();
+            oauth.getAccessToken(username, password, new Callback<Credential>() {
+                @Override
+                public void success(Credential credential, Response response) {
+                    setAccessToken(credential.access_token);
+                    callback.success(credential, response);
+                }
+                @Override
+                public void failure(RetrofitError error) {
+                    callback.failure(error);
+                }
+            });
+        }
     }
 
     public DrupalManager setAccessToken(String accessToken) {
@@ -461,6 +524,9 @@ public class DrupalManager implements DrupalService {
 
         if (mRequestInterceptor != null) {
             mRequestInterceptor.cookie = cookie;
+        }
+        if (oauth != null) {
+            oauth.setCookie(cookie);
         }
 
         return this;
@@ -642,6 +708,8 @@ public class DrupalManager implements DrupalService {
         String password,
         Callback<Login> callback
     ) {
+        setUsername(username);
+        setPassword(password);
         getService().getToken(username, password, callback);
     }
 
@@ -734,11 +802,37 @@ public class DrupalManager implements DrupalService {
         String username,
         String password
     ) {
+        setUsername(username);
+        setPassword(password);
         return getService().observeLogin(username, password);
     }
 
     @Override
     public Observable<Login> observeToken() {
         return getService().observeToken();
+    }
+
+    public DrupalManager setUsername(String username) {
+        this.username = username;
+        if (oauth != null) {
+            oauth.setUsername(username);
+        }
+        return this;
+    }
+
+    public DrupalManager setEmail(String email) {
+        this.email = email;
+        //if (oauth != null) {
+            //oauth.setEmail(email);
+        //}
+        return this;
+    }
+
+    public DrupalManager setPassword(String password) {
+        this.password = password;
+        if (oauth != null) {
+            oauth.setPassword(password);
+        }
+        return this;
     }
 }

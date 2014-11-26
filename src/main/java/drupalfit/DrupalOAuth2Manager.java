@@ -281,6 +281,7 @@ public class DrupalOAuth2Manager {
         );
     }
 
+    // DONT USE on main thread
     public Credential getAccessToken(String username, String password) {
         return mService.token(
             clientId,
@@ -292,6 +293,7 @@ public class DrupalOAuth2Manager {
         );
     }
 
+    // DONT USE on main thread
     public Credential getAccessToken(String cookie) {
         setCookie(cookie);
 
@@ -343,6 +345,7 @@ public class DrupalOAuth2Manager {
         );
     }
 
+    // DONT USE on main thread
     public Credential getAccessToken() {
         if (!TextUtils.isEmpty(cookie)) {
             return getAccessToken(cookie);
@@ -585,5 +588,15 @@ public class DrupalOAuth2Manager {
         }
 
         return sTrustedVerifier;
+    }
+
+    public DrupalOAuth2Manager setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public DrupalOAuth2Manager setPassword(String password) {
+        this.password = password;
+        return this;
     }
 }
