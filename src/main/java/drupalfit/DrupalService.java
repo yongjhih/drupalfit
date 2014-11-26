@@ -205,8 +205,11 @@ public interface DrupalService {
         //"login": "1414652619",
         public String login;
         //"status": "1",
+        public String status;
         //"timezone": "Asia/Taipei",
+        public String timezone;
         //"language": "en_GB",
+        public String language;
         //"picture": {
         //"url": "https://bar.com/sites/default/files/pictures/picture-24824-1414155320.jpg",
         //"rdf_mapping": [],
@@ -219,6 +222,7 @@ public interface DrupalService {
         //"status": "1",
         //"timestamp": "1414155320"
         //},
+        public Picture picture;
         //"init": "foo@bar.com",
         public String init;
         //"data": {
@@ -229,6 +233,35 @@ public interface DrupalService {
         //"roles": {
         //"2": "authenticated user"
         //}
+    }
+
+    @Keep
+    @KeepClassMembers
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Picture {
+        public Picture() {
+        }
+
+        //"url": "https://bar.com/sites/default/files/pictures/picture-24824-1414155320.jpg",
+        public String url;
+        //"rdf_mapping": [],
+
+        //"fid": "24340",
+        public String fid;
+        //"uid": "1234",
+        public String uid;
+        //"filename": "picture-24824-1414155320.jpg",
+        public String filename;
+        //"uri": "public://pictures/picture-24824-1414155320.jpg",
+        public String uri;
+        //"filemime": "image/jpeg",
+        public String filemime;
+        //"filesize": "9422",
+        public String filesize;
+        //"status": "1",
+        public String status;
+        //"timestamp": "1414155320"
+        public String timestamp;
     }
 
     /**
