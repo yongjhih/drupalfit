@@ -315,6 +315,27 @@ public interface DrupalService {
         Callback<User> callback
     );
 
+    /**
+     * getUser.
+     *
+     * <pre>
+     * Example URL : http://drupal6-services/services/plist/user/1
+     * Expected Response(in JSON): {"uid":"1","name":"admin","pass":"1a1dc91c907325c69271ddf0c944bc72","mail":"kyle@workhabit.com","mode":"0","sort":"0","threshold":"0","theme":"","signature":"","signature_format":"0","created":"1286571725","access":"1294792121","login":"1293782855","status":"1","timezone":null,"language":"","picture":"","init":"kyle@workhabit.com","data":"a:0:{}","roles":{"2":"authenticated user"}}
+     * </pre>
+     */
+    @GET("/user/{uid}.json")
+    void getUser(
+        @Path("uid") int uid,
+        Callback<User> callback
+    );
+
+    @GET("/user/{uid}.json")
+    void getUser(
+        @Path("uid") int uid,
+        @Query("access_token") int accessToken,
+        Callback<User> callback
+    );
+
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -384,8 +405,6 @@ public interface DrupalService {
         Callback<Node> callback
     );
 
-/*
-*/
     /**
      * Node.
      *
@@ -491,7 +510,7 @@ public interface DrupalService {
      */
     @GET("/comment/{cid}.json")
     void getComment(
-        @Field("cid") int cid,
+        @Path("cid") int cid,
         Callback<Comment> callback
     );
 
