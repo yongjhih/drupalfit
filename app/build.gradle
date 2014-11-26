@@ -46,7 +46,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
             proguardFiles 'base.pro'
             proguardFiles 'retrofit.pro'
