@@ -18,6 +18,7 @@ import retrofit.http.PUT;
 import retrofit.http.DELETE;
 import retrofit.http.Part;
 import retrofit.http.Path;
+import retrofit.http.Query;
 import retrofit.http.Streaming;
 import retrofit.mime.TypedFile;
 
@@ -332,7 +333,7 @@ public interface DrupalService {
     @GET("/user/{uid}.json")
     void getUser(
         @Path("uid") int uid,
-        @Query("access_token") int accessToken,
+        @Query("access_token") String accessToken,
         Callback<User> callback
     );
 

@@ -798,6 +798,23 @@ public class DrupalManager implements DrupalService {
     }
 
     @Override
+    public void getUser(
+        int uid,
+        String accessToken,
+        Callback<User> callback
+    ) {
+        getService().getUser(uid, accessToken, callback);
+    }
+
+    @Override
+    public void getUser(
+        int uid,
+        Callback<User> callback
+    ) {
+        getService().getUser(uid, callback);
+    }
+
+    @Override
     public Observable<Login> observeLogin(
         String username,
         String password
