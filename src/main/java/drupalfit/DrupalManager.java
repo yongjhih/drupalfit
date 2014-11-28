@@ -953,4 +953,14 @@ public class DrupalManager implements DrupalService {
         }
         return this;
     }
+
+    @Override
+    public void getUser(String email, Callback<User> callback) {
+        getService().getUser(email, callback);
+    }
+
+    @Override
+    public void getUser(String email, String accessToken, Callback<User> callback) {
+        getService().getUser(email, accessToken, callback);
+    }
 }
