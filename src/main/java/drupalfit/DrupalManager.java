@@ -42,6 +42,7 @@ import android.content.Context;
 
 import rx.Observable;
 import rx.functions.Func1;
+import com.squareup.okhttp.Request;
 
 public class DrupalManager implements DrupalService {
     private static DrupalManager sInstance = new DrupalManager();
@@ -308,12 +309,14 @@ public class DrupalManager implements DrupalService {
         String accessToken,
         final Callback<User> callback
     ) {
+        Log8.d(accessToken);
         if (!TextUtils.isEmpty(this.accessToken) && !this.accessToken.equals(accessToken)) {
             setAccessToken(accessToken);
             Log8.d(accessToken);
         }
 
-        getService().getProfile(accessToken, callback);
+        //getService().getProfile(accessToken, callback);
+        getProfile(callback);
     }
 
     private void syncOAuth() {
@@ -399,14 +402,19 @@ public class DrupalManager implements DrupalService {
 
     /* DONT USE on main thread */
     public String getAccessTokenWithNetwork() {
+        Log8.d();
         if (!TextUtils.isEmpty(accessToken)) {
+        Log8.d();
             return accessToken;
         }
 
         if (oauth != null) {
+        Log8.d();
             syncOAuth();
+        Log8.d();
             Credential c = oauth.getAccessToken();
             if (c != null) {
+        Log8.d();
                 setAccessToken(c.access_token);
             }
         }
@@ -439,15 +447,38 @@ public class DrupalManager implements DrupalService {
 
     public void getAccessToken(final Callback<Credential> callback) {
         if (oauth != null) {
+            Log8.d();
             syncOAuth();
             oauth.getAccessToken(new Callback<Credential>() {
                 @Override
                 public void success(Credential credential, Response response) {
+                    Log8.d();
                     setAccessToken(credential.access_token);
                     callback.success(credential, response);
                 }
                 @Override
                 public void failure(RetrofitError error) {
+                    Log8.d();
+                    callback.failure(error);
+                }
+            });
+        }
+    }
+
+    public void getAccessToken(String cookie, final Callback<Credential> callback) {
+        if (oauth != null) {
+            Log8.d();
+            syncOAuth();
+            oauth.getAccessToken(cookie, new Callback<Credential>() {
+                @Override
+                public void success(Credential credential, Response response) {
+                    Log8.d();
+                    setAccessToken(credential.access_token);
+                    callback.success(credential, response);
+                }
+                @Override
+                public void failure(RetrofitError error) {
+                    Log8.d();
                     callback.failure(error);
                 }
             });
@@ -464,11 +495,13 @@ public class DrupalManager implements DrupalService {
             oauth.getAccessToken(username, password, new Callback<Credential>() {
                 @Override
                 public void success(Credential credential, Response response) {
+                    Log8.d();
                     setAccessToken(credential.access_token);
                     callback.success(credential, response);
                 }
                 @Override
                 public void failure(RetrofitError error) {
+                    Log8.d();
                     callback.failure(error);
                 }
             });
@@ -491,10 +524,7 @@ public class DrupalManager implements DrupalService {
 
         if (mService == null) {
             this.endpoint = endpoint;
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.setSslSocketFactory(getTrustedFactory());
-            okHttpClient.setHostnameVerifier(getTrustedVerifier());
-            Client client = new OkClient(okHttpClient);
+            Client client = new OkClient(getOkHttpClient());
 
             if (mRequestInterceptor == null) {
                 mRequestInterceptor = new SimpleRequestInterceptor();
@@ -537,13 +567,84 @@ public class DrupalManager implements DrupalService {
      *
      * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-up with access_token</a>
      */
-    private void getCookie(Context context, String provider, String token, Callback<String> callback) {
+    private void getCookie(Context context, String provider, String token, final Callback<String> callback) {
         if (context == null) return;
         if (TextUtils.isEmpty(token)) return;
 
         Uri uri = Uri.parse(endpoint);
+        final String url = uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token;
 
-        new WebDialog(context, uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token, callback).show();
+        //new WebDialog(context, url, callback).show();
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+        //com.squareup.okhttp.Response response = getOkHttpClient().newCall(request).execute();
+        com.squareup.okhttp.Call call = getOkHttpClient().newCall(request);
+        call.enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e){
+                Log8.d(e);
+                callback.failure(RetrofitError.unexpectedError(url, e));
+            }
+
+            @Override
+            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                final String cookie = response.header("Set-Cookie");
+                if (!TextUtils.isEmpty(cookie)) {
+                    setCookie(cookie);
+                    getToken(new Callback<Login>() { // Fetch a new xcsrfToken
+                        @Override
+                        public void success(Login l, Response r) {
+                            Log8.d(l.token);
+                            setXcsrfToken(l.token);
+                            callback.success(cookie, (Response) null);
+                        }
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Log8.d("Auto-fetch new xcsrfToken failure");
+                            //callback.failure(error);
+                        }
+                    });
+                } else {
+                    callback.failure(RetrofitError.unexpectedError(url, new RuntimeException()));
+                }
+            }
+        });
+        //call.execute();
+    }
+
+    public void getAccessToken(Context context, String provider, String token, final Callback<Credential> callback) {
+        Log8.d();
+        if (oauth != null) {
+            Log8.d();
+            getCookie(context, provider, token, new Callback<String>() {
+                @Override
+                public void success(final String cookie, final Response response) {
+                    getAccessToken(callback);
+                }
+                @Override
+                public void failure(RetrofitError error) {
+                    Log8.d();
+                    callback.failure(error);
+                }
+            });
+        } else {
+        Log8.d();
+            callback.failure(RetrofitError.unexpectedError("failure", new RuntimeException()));
+        }
+    }
+
+    protected OkHttpClient okHttpClient;
+
+    public OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient();
+            okHttpClient.setSslSocketFactory(getTrustedFactory());
+            okHttpClient.setHostnameVerifier(getTrustedVerifier());
+            okHttpClient.setFollowSslRedirects(true);
+        }
+
+        return okHttpClient;
     }
 
     public class SimpleRequestInterceptor implements RequestInterceptor {
@@ -554,7 +655,7 @@ public class DrupalManager implements DrupalService {
         @Override
         public void intercept(RequestFacade request) {
             if (!TextUtils.isEmpty(cookie)) {
-                Log8.d(cookie);
+                Log8.d();
                 request.addHeader("Cookie", cookie);
             }
             if (!TextUtils.isEmpty(xcsrfToken)) {

@@ -53,8 +53,8 @@ public class WebDialog extends Dialog {
 
     private static final String DISPLAY_TOUCH = "touch";
     private static final String USER_AGENT = "user_agent";
-    static final String REDIRECT_URI = "fbconnect://success";
-    static final String CANCEL_URI = "fbconnect://cancel";
+    static final String REDIRECT_URI = "connect://success";
+    static final String CANCEL_URI = "connect://cancel";
     static final boolean DISABLE_SSL_CHECK_FOR_TESTING = false;
 
     // width below which there are no extra margins
@@ -213,7 +213,6 @@ public class WebDialog extends Dialog {
                 } else {
                     // success
                     callback.success(android.webkit.CookieManager.getInstance().getCookie(url), (Response) null);
-                    Log8.d("success");
                 }
                 WebDialog.this.dismiss();
                 return true;

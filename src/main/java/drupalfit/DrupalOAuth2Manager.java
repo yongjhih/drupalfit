@@ -19,6 +19,7 @@ import retrofit.http.Part;
 import retrofit.http.Path;
 import retrofit.http.Streaming;
 import retrofit.mime.TypedFile;
+import com.squareup.okhttp.Request;
 
 import proguard.annotation.Keep;
 import proguard.annotation.KeepClassMembers;
@@ -429,13 +430,38 @@ public class DrupalOAuth2Manager {
      *
      * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-up with access_token</a>
      */
-    private void requestHybridauthCookie(Context context, String provider, String token, Callback<String> callback) {
+    private void requestHybridauthCookie(Context context, String provider, String token, final Callback<String> callback) {
         if (context == null) return;
         if (TextUtils.isEmpty(token)) return;
 
         Uri uri = Uri.parse(endpoint);
+        final String url = uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token;
 
-        new WebDialog(context, uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token, callback).show();
+        //new WebDialog(context, url, callback).show();
+        Request request = new Request.Builder()
+            .url(url)
+            .build();
+        //com.squareup.okhttp.Response response = getOkHttpClient().newCall(request).execute();
+        com.squareup.okhttp.Call call = getOkHttpClient().newCall(request);
+        call.enqueue(new com.squareup.okhttp.Callback() {
+            @Override
+            public void onFailure(Request request, IOException e){
+                Log8.d(e);
+                callback.failure(RetrofitError.unexpectedError(url, e));
+            }
+
+            @Override
+            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                String cookie = response.header("Set-Cookie");
+                if (!TextUtils.isEmpty(cookie)) {
+                    setCookie(cookie);
+                    callback.success(cookie, (Response) null);
+                } else {
+                    callback.failure(RetrofitError.unexpectedError(url, new RuntimeException()));
+                }
+            }
+        });
+        //call.execute();
     }
 
     protected Context context;
@@ -458,21 +484,30 @@ public class DrupalOAuth2Manager {
         this((Context) null, endpoint, clientId, clientSecret);
     }
 
+    protected OkHttpClient okHttpClient;
+
+    public OkHttpClient getOkHttpClient() {
+        if (okHttpClient == null) {
+            okHttpClient = new OkHttpClient();
+
+            if (allTrust) {
+                okHttpClient.setSslSocketFactory(getTrustedFactory());
+                okHttpClient.setHostnameVerifier(getTrustedVerifier());
+            }
+
+            okHttpClient.setFollowSslRedirects(true);
+        }
+
+        return okHttpClient;
+    }
+
     public DrupalOAuth2Manager(Context context, String endpoint, String clientId, String clientSecret) {
         setContext(context);
         setEndpoint(endpoint);
         setClientId(clientId);
         setClientSecret(clientSecret);
 
-        OkHttpClient okHttpClient = new OkHttpClient();
-
-        if (allTrust) {
-            okHttpClient.setSslSocketFactory(getTrustedFactory());
-            okHttpClient.setHostnameVerifier(getTrustedVerifier());
-        }
-
-        okHttpClient.setFollowSslRedirects(true);
-        Client client = new OkClient(okHttpClient);
+        Client client = new OkClient(getOkHttpClient());
 
         if (mRequestInterceptor == null) {
             mRequestInterceptor = new SimpleRequestInterceptor();
