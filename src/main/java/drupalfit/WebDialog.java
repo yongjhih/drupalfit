@@ -33,6 +33,7 @@ import android.view.*;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.webkit.WebChromeClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,20 +56,7 @@ public class WebDialog extends Dialog {
     private static final String USER_AGENT = "user_agent";
     static final String REDIRECT_URI = "connect://success";
     static final String CANCEL_URI = "connect://cancel";
-    static final boolean DISABLE_SSL_CHECK_FOR_TESTING = false;
-
-    // width below which there are no extra margins
-    private static final int NO_PADDING_SCREEN_WIDTH = 480;
-    // width beyond which we're always using the MIN_SCALE_FACTOR
-    private static final int MAX_PADDING_SCREEN_WIDTH = 800;
-    // height below which there are no extra margins
-    private static final int NO_PADDING_SCREEN_HEIGHT = 800;
-    // height beyond which we're always using the MIN_SCALE_FACTOR
-    private static final int MAX_PADDING_SCREEN_HEIGHT = 1280;
-
-    // the minimum scaling factor for the web dialog (50% of screen size)
-    private static final double MIN_SCALE_FACTOR = 0.5;
-    // translucent border around the webview
+    static final boolean DISABLE_SSL_CHECK = false;
 
     /**
      * Constructor which can be used to display a dialog with an already-constructed URL.
@@ -185,6 +173,8 @@ public class WebDialog extends Dialog {
         webView.setVerticalScrollBarEnabled(false);
         webView.setHorizontalScrollBarEnabled(false);
         webView.setWebViewClient(new DialogWebViewClient());
+        //webView.setWebChromeClient(new WebChromeClient());
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.loadUrl(url);
         webView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -204,29 +194,15 @@ public class WebDialog extends Dialog {
         @Override
         @SuppressWarnings("deprecation")
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            if (true) {
-                Log8.d(url);
-                if (url.contains("error")) {
-                    // error
-                    Log8.d("error");
-                    callback.failure(RetrofitError.unexpectedError(url, new RuntimeException()));
-                } else {
-                    // success
-                    callback.success(android.webkit.CookieManager.getInstance().getCookie(url), (Response) null);
-                }
-                WebDialog.this.dismiss();
-                return true;
-            } else if (url.startsWith(WebDialog.CANCEL_URI)) {
-        Log8.d();
-                WebDialog.this.dismiss();
-                return true;
-            } else if (url.contains(DISPLAY_TOUCH)) {
-        Log8.d();
-                return false;
+            Log8.d(url);
+            if (url.contains("error")) {
+                // error
+                Log8.d("error");
+                callback.failure(RetrofitError.unexpectedError(url, new RuntimeException()));
+            } else {
+                // success
+                callback.success(android.webkit.CookieManager.getInstance().getCookie(url), (Response) null);
             }
-            // launch non-dialog URLs in a full browser
-            getContext().startActivity(
-                    new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
             return true;
         }
 
