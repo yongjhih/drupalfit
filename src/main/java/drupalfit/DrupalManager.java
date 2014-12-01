@@ -310,12 +310,8 @@ public class DrupalManager implements DrupalService {
         final Callback<User> callback
     ) {
         Log8.d(accessToken);
-        if (!TextUtils.isEmpty(this.accessToken) && !this.accessToken.equals(accessToken)) {
-            setAccessToken(accessToken);
-            Log8.d(accessToken);
-        }
+        setAccessToken(accessToken);
 
-        //getService().getProfile(accessToken, callback);
         getProfile(callback);
     }
 
@@ -563,9 +559,9 @@ public class DrupalManager implements DrupalService {
     }
 
     /**
-     * Allow sign-up with access_token.
+     * Allow sign-in with access_token.
      *
-     * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-up with access_token</a>
+     * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-in with access_token</a>
      */
     private void getCookie(Context context, String provider, String token, final Callback<String> callback) {
         if (context == null) return;
