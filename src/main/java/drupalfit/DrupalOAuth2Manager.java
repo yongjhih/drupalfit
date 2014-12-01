@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.squareup.okhttp.OkHttpClient;
 
 import retrofit.Callback;
+import retrofit.ResponseCallback;
 import retrofit.RestAdapter;
 import retrofit.RequestInterceptor;
 import retrofit.RetrofitError;
@@ -318,9 +319,9 @@ public class DrupalOAuth2Manager {
     public void getAccessToken(String cookie, final Callback<Credential> callback) {
         setCookie(cookie);
 
-        final Callback authorizeCallback = new Callback<Response>() {
+        final Callback authorizeCallback = new ResponseCallback() {
             @Override
-            public void success(Response response, Response response2) {
+            public void success(Response response) {
                 Log8.d();
                 Uri uri = Uri.parse(response.getUrl());
                 String code = uri.getQueryParameter("code");

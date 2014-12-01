@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.squareup.okhttp.OkHttpClient;
 
 import retrofit.Callback;
+import retrofit.ResponseCallback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Client;
@@ -41,7 +42,7 @@ public interface DrupalOAuth2 {
         @Query("client_secret") String clientSecret,
         @Query("response_type") String responseType,
         @Query("state") String state,
-        Callback<Response> callback
+        ResponseCallback callback
     );
 
     @GET("/authorize")
