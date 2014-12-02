@@ -344,8 +344,8 @@ public class DrupalManager implements DrupalService {
                         callback.failure(error);
                     }
                 });
-            } else if (TextUtils.isEmpty(cookie) && !TextUtils.isEmpty(provider) && !TextUtils.isEmpty(token)) {
-                getCookie(provider, token, new Callback<String>() {
+            } else if (TextUtils.isEmpty(cookie) && context != null && !TextUtils.isEmpty(provider) && !TextUtils.isEmpty(token)) {
+                getCookie(context, provider, token, new Callback<String>() {
                     @Override
                     public void success(String cookie, Response response) {
                         Log8.d(cookie);
@@ -563,13 +563,14 @@ public class DrupalManager implements DrupalService {
      *
      * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-in with access_token</a>
      */
-    private void getCookie(String provider, String token, final Callback<String> callback) {
+    private void getCookie(Context context, String provider, String token, final Callback<String> callback) {
         if (context == null) return;
         if (TextUtils.isEmpty(token)) return;
 
         Uri uri = Uri.parse(endpoint);
         final String url = uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token;
 
+        //new WebDialog(context, url, callback).show();
         Request request = new Request.Builder()
             .url(url)
             .build();
@@ -612,7 +613,7 @@ public class DrupalManager implements DrupalService {
         Log8.d();
         if (oauth != null) {
             Log8.d();
-            getCookie(provider, token, new Callback<String>() {
+            getCookie(context, provider, token, new Callback<String>() {
                 @Override
                 public void success(final String cookie, final Response response) {
                     getAccessToken(callback);

@@ -223,8 +223,8 @@ public class DrupalOAuth2Manager {
             return this;
         }
 
-        public Builder setProvider(String provider, String token) {
-            return setProvider(provider).setToken(token);
+        public Builder setProvider(Context context, String provider, String token) {
+            return setContext(context).setProvider(provider).setToken(token);
         }
 
         public DrupalOAuth2Manager build() {
@@ -319,7 +319,7 @@ public class DrupalOAuth2Manager {
     public void getAccessToken(String cookie, final Callback<Credential> callback) {
         setCookie(cookie);
 
-        final ResponseCallback authorizeCallback = new ResponseCallback() {
+        final Callback authorizeCallback = new ResponseCallback() {
             @Override
             public void success(Response response) {
                 Log8.d();
@@ -354,7 +354,7 @@ public class DrupalOAuth2Manager {
         } else if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
             return getAccessToken(username, password);
         } else {
-            return getAccessTokenByProvider(provider, token);
+            return getAccessToken(context, provider, token);
         }
     }
 
@@ -367,15 +367,15 @@ public class DrupalOAuth2Manager {
             getAccessToken(username, password, callback);
         } else {
             Log8.d();
-            getAccessTokenByProvider(provider, token, callback);
+            getAccessToken(context, provider, token, callback);
         }
     }
 
-    public void getAccessTokenByProvider(final Callback<Credential> callback) {
-        getAccessTokenByProvider(provider, token, callback);
+    public void getAccessToken(Context context, final Callback<Credential> callback) {
+        getAccessToken(context, provider, token, callback);
     }
 
-    public Credential getAccessTokenByProvider(String provider, String token) {
+    public Credential getAccessToken(Context context, String provider, String token) {
         if (TextUtils.isEmpty(token)) {
             return null;
         }
@@ -386,12 +386,12 @@ public class DrupalOAuth2Manager {
             return null;
         }
 
-        // TODO String cookie = getCookieByProvider(provider, token)
+        // TODO String cookie = getHybridauthCookie(context, provider, token)
         // return getAccessToken(cookie);
         return null;
     }
 
-    public void getAccessTokenByProvider(String provider, String token, final Callback<Credential> callback) {
+    public void getAccessToken(Context context, String provider, String token, final Callback<Credential> callback) {
         if (TextUtils.isEmpty(token)) {
             Log8.d();
             callback.failure(RetrofitError.unexpectedError("oauth://failure", new RuntimeException()));
@@ -402,8 +402,13 @@ public class DrupalOAuth2Manager {
             callback.failure(RetrofitError.unexpectedError("oauth://failure", new RuntimeException()));
             return;
         }
+        if (context == null) {
+            Log8.d();
+            callback.failure(RetrofitError.unexpectedError("oauth://failure", new RuntimeException()));
+            return;
+        }
 
-        getCookieByProvider(provider, token, new Callback<String>() {
+        requestHybridauthCookie(context, provider, token, new Callback<String>() {
             @Override
             public void success(String cookie, Response response) {
                 Log8.d(cookie);
@@ -426,13 +431,14 @@ public class DrupalOAuth2Manager {
      *
      * @see <a href="https://github.com/yongjhih/drupal-hybridauth/commit/268b72a598665b0738e3b06e7b59dcb3bda5b999">Allow sign-up with access_token</a>
      */
-    private void getCookieByProvider(String provider, String token, final Callback<String> callback) {
+    private void requestHybridauthCookie(Context context, String provider, String token, final Callback<String> callback) {
         if (context == null) return;
         if (TextUtils.isEmpty(token)) return;
 
         Uri uri = Uri.parse(endpoint);
         final String url = uri.getScheme() + "://" + uri.getAuthority() + "/hybridauth/window/" + provider + "?destination=node&destination_error=node&access_token=" + token;
 
+        //new WebDialog(context, url, callback).show();
         Request request = new Request.Builder()
             .url(url)
             .build();
@@ -467,11 +473,6 @@ public class DrupalOAuth2Manager {
 
     public void setProvider(String provider) {
         this.provider = provider;
-    }
-
-    public void setProvider(String provider, String token) {
-        setProvider(provider);
-        setToken(token);
     }
 
     public void setProvider(Context context, String provider, String token) {
