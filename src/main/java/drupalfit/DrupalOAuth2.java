@@ -42,7 +42,7 @@ public interface DrupalOAuth2 {
         @Query("client_secret") String clientSecret,
         @Query("response_type") String responseType,
         @Query("state") String state,
-        ResponseCallback callback
+        Callback<Response> callback
     );
 
     @GET("/authorize")
