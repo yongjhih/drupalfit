@@ -959,4 +959,11 @@ public class DrupalManager implements DrupalService {
     public void getUser(String user, String accessToken, Callback<User> callback) {
         getService().getUser(user, accessToken, callback);
     }
+
+    /*
+    @Override
+    public <P> void getGenericUser(String user, Callback<P> callback) {
+        getService().getGenericUser(user, callback);
+    }
+    */
 }

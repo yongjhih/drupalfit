@@ -371,15 +371,23 @@ public interface DrupalService {
         Callback<User> callback
     );
 
-    @GET("/user/{email}.json")
+    @GET("/user/{user}.json")
     void getUser(
-        @Path("email") String email,
+        @Path("user") String user,
         Callback<User> callback
     );
 
-    @GET("/user/{email}.json")
+    /*
+    @GET("/user/{user}.json")
+    <P> void getGenericUser(
+        @Path("user") String user,
+        Callback<P> callback
+    );
+    */
+
+    @GET("/user/{user}.json")
     void getUser(
-        @Path("email") String email,
+        @Path("user") String user,
         @Query("access_token") String accessToken,
         Callback<User> callback
     );
