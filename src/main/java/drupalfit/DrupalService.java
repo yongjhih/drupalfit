@@ -184,14 +184,90 @@ public interface DrupalService {
         public Picture picture;
         //"init": "foo@bar.com",
         public String init;
-        //"data": {
-        //"mimemail_textonly": 0,
-        //"l10n_client_disabled": false,
-        //"contact": 1
-        //},
         //"roles": {
         //"2": "authenticated user"
         //}
+        //"realname": "Andrew Chen",
+        public String realname; // drupal realname module
+
+        // "data": {
+        public Data data;
+
+        @Keep
+        @KeepClassMembers
+        @JsonIgnoreProperties(ignoreUnknown = true)
+        public static class Data {
+            public Data() {
+            }
+
+            // "mimemail_textonly": 0,
+            public int mimemail_textonly;
+            // "l10n_client_disabled": false,
+            public boolean l10n_client_disabled;
+            // "contact": 1,
+            public int contact;
+
+            // "hybridauth": {
+            public HybridAuth hybridauth; // drupal hybridauth module
+
+            @Keep
+            @KeepClassMembers
+            @JsonIgnoreProperties(ignoreUnknown = true)
+            public static class HybridAuth {
+                public HybridAuth() {
+                }
+                // "provider": "Facebook",
+                public String provider;
+                // "coverInfoURL": "https://graph.facebook.com/123?fields=cover",
+                public String coverInfoURL;
+                // "username": "foo",
+                public String username;
+                // "zip": null,
+                public String zip;
+                // "city": "Newyork",
+                public String city;
+                // "region": "Newyork, American",
+                public String region;
+                // "country": "American",
+                public String country;
+                // "address": null,
+                public String address;
+                // "phone": null,
+                public String phone;
+                // "lastName": "Chen",
+                public String lastName;
+                // "firstName": "Andrew",
+                public String firstName;
+                // "description": "",
+                public String description;
+                // "displayName": "Andrew Chen",
+                public String displayName;
+                // "photoURL": "https://graph.facebook.com/123/picture?width=150&height=150",
+                public String photoURL;
+                // "profileURL": "https://www.facebook.com/123",
+                public String profileURL;
+                // "webSiteURL": "http://example.com",
+                public String webSiteURL;
+                // "identifier": "123",
+                public String identifier;
+                // "gender": "male",
+                public String gender;
+                // "language": "en_US",
+                public String language;
+                // "age": null,
+                public String age;
+                // "birthDay": 1,
+                public int birthDay;
+                // "birthMonth": 1,
+                public int birthMonth;
+                // "birthYear": 1984,
+                public int birthYear;
+                // "email": "foo@exmple.com",
+                public String email;
+                // "emailVerified": "foo@exmple.com"
+                public String emailVerified;
+            }
+        }
     }
 
     @Keep
