@@ -1,6 +1,8 @@
 drupalfit
 =========
 
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/yongjhih/drupalfit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Build Status](https://travis-ci.org/yongjhih/drupalfit.png?branch=master)](https://travis-ci.org/yongjhih/drupalfit) [![Stories in Ready](https://badge.waffle.io/yongjhih/drupalfit.png)](http://waffle.io/yongjhih/drupalfit) 
 [![Bountysource](https://www.bountysource.com/badge/team?team_id=43965&style=bounties_posted)](https://www.bountysource.com/teams/8tory/bounties?utm_source=8tory&utm_medium=shield&utm_campaign=bounties_posted)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.infstory/drupalfit/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.infstory/drupalfit)
