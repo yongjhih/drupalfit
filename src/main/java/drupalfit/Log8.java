@@ -12,7 +12,7 @@ public final class Log8 {
     public static boolean enabledW = sEnabled;
     public static boolean enabledE = true;
 
-    public static boolean printStackStrace = false;
+    public static boolean printStackTrace = false;
 
     /**
      * <pre>
@@ -62,7 +62,7 @@ public final class Log8 {
     public static int v(Object... arr) {
         if (!enabledV) return 0;
         String stackTraceString = "";
-        if (printStackStrace) {
+        if (printStackTrace) {
             stackTraceString = android.util.Log.getStackTraceString(new Exception());
         }
         return android.util.Log.v(sTag, getMsg(arr) + stackTraceString);
