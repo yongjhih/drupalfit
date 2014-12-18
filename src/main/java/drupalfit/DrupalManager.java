@@ -966,4 +966,15 @@ public class DrupalManager implements DrupalService {
         getService().getGenericUser(user, callback);
     }
     */
+
+    @Override
+    public User getUser(String user) {
+        return getService().getUser(user);
+    }
+
+    @Override
+    public User getUser(String user, String accessToken) {
+        return getService().getUser(user);
+    }
+
 }

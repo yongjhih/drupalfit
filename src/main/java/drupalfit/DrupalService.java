@@ -392,6 +392,17 @@ public interface DrupalService {
         Callback<User> callback
     );
 
+    @GET("/user/{user}.json")
+    User getUser(
+        @Path("user") String user
+    );
+
+    @GET("/user/{user}.json")
+    User getUser(
+        @Path("user") String user,
+        @Query("access_token") String accessToken
+    );
+
     @Keep
     @KeepClassMembers
     @JsonIgnoreProperties(ignoreUnknown = true)
