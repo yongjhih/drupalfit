@@ -319,9 +319,9 @@ public class DrupalOAuth2Manager {
     public void getAccessToken(String cookie, final Callback<Credential> callback) {
         setCookie(cookie);
 
-        final Callback<Response> authorizeCallback = new ResponseCallback() {
+        final Callback<Response> authorizeCallback = new Callback<Response>() {
             @Override
-            public void success(Response response) {
+            public void success(Response response, Response response2) {
                 Log8.d();
                 Uri uri = Uri.parse(response.getUrl());
                 String code = uri.getQueryParameter("code");
