@@ -61,10 +61,8 @@ import com.github.johnpersano.supertoasts.SuperActivityToast;
 import android.view.inputmethod.InputMethodManager;
 
 import rx.schedulers.*;
-import rx.android.schedulers.*;
 import rx.functions.*;
 import rx.Observable;
-import rx.android.observables.*;
 
 public class HomeActivity extends ToolBarActivity {
     @InjectView(R.id.email)
