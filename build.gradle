@@ -26,7 +26,7 @@ dependencies {
     compile 'io.reactivex:rxjava:1.0.8'
     //compile 'io.reactivex:rxandroid:0.23.+'
     //compile project(':RxAndroid:rxandroid')
-    compile 'com.infstory:proguard-annotations:1.0.0'
+    compile 'com.infstory:proguard-annotations:1.0.1'
 }
 
 android {
