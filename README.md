@@ -1,6 +1,8 @@
 drupalfit
 =========
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-drupalfit-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/1250)
+
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/yongjhih/drupalfit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://travis-ci.org/yongjhih/drupalfit.png?branch=master)](https://travis-ci.org/yongjhih/drupalfit) [![Stories in Ready](https://badge.waffle.io/yongjhih/drupalfit.png)](http://waffle.io/yongjhih/drupalfit) 
