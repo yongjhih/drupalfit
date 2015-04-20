@@ -40,6 +40,7 @@ import drupalfit.DrupalOAuth2.Credential;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.content.Context;
+import rx.Observable;
 
 /**
  * OAuth of authentication.
@@ -347,15 +348,23 @@ public class DrupalOAuth2Manager {
         );
     }
 
-    // DONT USE on main thread
-    public Credential getAccessToken() {
-        if (!TextUtils.isEmpty(cookie)) {
-            return getAccessToken(cookie);
-        } else if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password)) {
-            return getAccessToken(username, password);
-        } else {
-            return getAccessToken(context, provider, token);
-        }
+    public Observable<Credential> getCredential() {
+        return Observable.create(sub -> {
+            getAccessToken(new Callback<Credential>() {
+                @Override
+                public void success(Credential credential, Response response) {
+                    sub.onNext(credential);
+                }
+                @Override
+                public void failure(RetrofitError error) {
+                    sub.onError(error);
+                }
+            });
+        });
+    }
+
+    public Observable<String> getAccessToken() {
+        return getCredential().map(credential -> credential.access_token);
     }
 
     public void getAccessToken(final Callback<Credential> callback) {

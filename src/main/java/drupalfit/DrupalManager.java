@@ -325,6 +325,27 @@ public class DrupalManager implements DrupalService {
     }
 
     @Override
+    public Observable<User> getProfile() {
+        if (accessToken != null) {
+            return getService().getProfile(accessToken);
+        }
+
+        if (oauth != null) {
+            syncOAuth();
+            return oauth.getAccessToken()
+                .doOnNext(token -> setAccessToken(token))
+                .flatMap(token -> getProfile(token));
+        }
+
+        return getService().getProfile();
+    }
+
+    @Override
+    public Observable<User> getProfile(String accessToken) {
+        return getService().getProfile(accessToken);
+    }
+
+    @Override
     public void getProfile(
         final Callback<User> callback
     ) {
@@ -394,28 +415,6 @@ public class DrupalManager implements DrupalService {
 
     public static DrupalService getService() {
         return get().getService(null);
-    }
-
-    /* DONT USE on main thread */
-    public String getAccessTokenWithNetwork() {
-        Log8.d();
-        if (!TextUtils.isEmpty(accessToken)) {
-        Log8.d();
-            return accessToken;
-        }
-
-        if (oauth != null) {
-        Log8.d();
-            syncOAuth();
-        Log8.d();
-            Credential c = oauth.getAccessToken();
-            if (c != null) {
-        Log8.d();
-                setAccessToken(c.access_token);
-            }
-        }
-
-        return accessToken;
     }
 
     public String getAccessToken() {
@@ -535,6 +534,7 @@ public class DrupalManager implements DrupalService {
                 .setErrorHandler(new ErrorHandler())
                 .setClient(client)
                 .setConverter(new retrofit.converter.JacksonConverter())
+                .setLogLevel(RestAdapter.LogLevel.FULL)  // Do this for development too.
                 .build().create(DrupalService.class);
         }
 
@@ -650,8 +650,9 @@ public class DrupalManager implements DrupalService {
 
         @Override
         public void intercept(RequestFacade request) {
+            /*
             if (!TextUtils.isEmpty(cookie)) {
-                Log8.d();
+                Log8.d(cookie);
                 request.addHeader("Cookie", cookie);
             }
             if (!TextUtils.isEmpty(xcsrfToken)) {
@@ -663,6 +664,7 @@ public class DrupalManager implements DrupalService {
                 //request.addQueryParam("access_token", accessToken);
                 request.addEncodedQueryParam("access_token", accessToken);
             }
+            */
         }
     }
 
@@ -682,6 +684,8 @@ public class DrupalManager implements DrupalService {
 
         @Override
         public Throwable handleError(RetrofitError cause) {
+            //Response r = cause.getResponse();
+            Log8.d(cause.getUrl());
             cause.printStackTrace();
             return cause;
         }

@@ -350,6 +350,13 @@ public interface DrupalService {
         Callback<User> callback
     );
 
+    @FormUrlEncoded
+    @POST("/user/profile.json")
+    Observable<User> getProfile(@Field("access_token") String accessToken);
+
+    @POST("/user/profile.json")
+    Observable<User> getProfile();
+
     /**
      * getUser.
      *
