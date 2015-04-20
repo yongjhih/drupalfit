@@ -15,12 +15,12 @@ apply plugin: 'com.android.library'
 dependencies {
     //compile fileTree(dir: 'src/main/libs', include: '*.jar')
 
-    compile 'com.squareup.retrofit:retrofit:1.8.0'
-    compile 'com.squareup.retrofit:converter-jackson:1.8.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
-    compile 'com.squareup.okhttp:okhttp:2.0.0'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.4.2'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.retrofit:converter-jackson:1.9.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.fasterxml.jackson.core:jackson-core:2.5.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.5.1'
     //compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.2'
     //compile 'com.netflix.rxjava:rxjava-android:0.20.+'
     compile 'io.reactivex:rxjava:1.0.8'
